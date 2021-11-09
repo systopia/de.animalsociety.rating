@@ -1,0 +1,28 @@
+{
+  "_lookup": ["name"],
+  "name": "activity_weight",
+  "title": "Weight of single activity",
+  "description": "",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "normal",
+      "label": "normal",
+      "value": "1",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "significant",
+      "label": "significant",
+      "value": "3",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    }
+  ]
+}

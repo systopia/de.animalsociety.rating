@@ -1,0 +1,88 @@
+{
+  "_lookup": ["name"],
+  "name": "activity_theme",
+  "title": "Theme of the activity",
+  "description": "",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock",
+      "label": "Livestock",
+      "value": "1",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "aquaculture",
+      "label": "Aquaculture & fisheries",
+      "value": "2",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_testing",
+      "label": "Animal testing",
+      "value": "3",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights",
+      "label": "Animal rights",
+      "value": "4",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "hunting_wildlife",
+      "label": "hunting & wildlife",
+      "value": "4",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "pets",
+      "label": "pets",
+      "value": "5",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animals_entertainment",
+      "label": "animals in entertainment",
+      "value": "6",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "food_consumer_protection",
+      "label": "food & consumer protection",
+      "value": "6",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    }
+  ]
+}
