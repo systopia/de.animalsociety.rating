@@ -66,6 +66,23 @@
     {
       "_lookup": ["column_name", "custom_group_id"],
       "_translate": ["label"],
+      "weight": "3",
+      "name": "activity_weight",
+      "column_name": "activity_weight",
+      "label": "Theme",
+      "data_type": "String",
+      "html_type": "Multi-Select",
+      "option_group_id": "activity_weight",
+      "is_required": "0",
+      "is_searchable": "1",
+      "is_search_range": "0",
+      "is_active": "1",
+      "is_view": "0",
+      "in_selector": "1"
+    },
+    {
+      "_lookup": ["column_name", "custom_group_id"],
+      "_translate": ["label"],
       "weight": "4",
       "name": "activity_score_weighted",
       "column_name": "activity_score_weighted",
