@@ -1,7 +1,7 @@
 {
   "_lookup": ["name"],
   "name": "activity_score",
-  "title": "Score of single activity",
+  "title": "Activity Score",
   "description": "",
   "_values": [
     {

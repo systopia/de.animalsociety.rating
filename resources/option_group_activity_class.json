@@ -1,14 +1,14 @@
 {
   "_lookup": ["name"],
-  "name": "activity_theme",
-  "title": "Activity Theme",
+  "name": "activity_class",
+  "title": "Activity Class",
   "description": "",
   "_values": [
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "livestock",
-      "label": "Livestock",
+      "name": "public_communication",
+      "label": "Public communication",
       "value": "1",
       "filter": "0",
       "is_reserved": "0",
@@ -17,8 +17,8 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "aquaculture",
-      "label": "Aquaculture & fisheries",
+      "name": "speech",
+      "label": "Speech",
       "value": "2",
       "filter": "0",
       "is_reserved": "0",
@@ -27,18 +27,8 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "animal_testing",
-      "label": "Animal testing",
-      "value": "3",
-      "filter": "0",
-      "is_reserved": "0",
-      "is_active": "1"
-    },
-    {
-      "_lookup": ["name"],
-      "_translate": ["label"],
-      "name": "animal_rights",
-      "label": "Animal rights",
+      "name": "extraparliamentary_work",
+      "label": "extra-parliamentary work",
       "value": "4",
       "filter": "0",
       "is_reserved": "0",
@@ -47,8 +37,8 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "hunting_wildlife",
-      "label": "hunting & wildlife",
+      "name": "parliamentary_question",
+      "label": "parliamentary question",
       "value": "5",
       "filter": "0",
       "is_reserved": "0",
@@ -57,18 +47,8 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "pets",
-      "label": "pets",
-      "value": "6",
-      "filter": "0",
-      "is_reserved": "0",
-      "is_active": "1"
-    },
-    {
-      "_lookup": ["name"],
-      "_translate": ["label"],
-      "name": "animals_entertainment",
-      "label": "animals in entertainment",
+      "name": "vote_subsidies",
+      "label": "Vote on subsidies",
       "value": "7",
       "filter": "0",
       "is_reserved": "0",
@@ -77,9 +57,19 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "food_consumer_protection",
-      "label": "food & consumer protection",
+      "name": "vote_public_contract",
+      "label": "Vote on public contract",
       "value": "8",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "vote_draft_law",
+      "label": "Vote on draft law",
+      "value": "10",
       "filter": "0",
       "is_reserved": "0",
       "is_active": "1"

@@ -1,14 +1,14 @@
 {
   "_lookup": ["name"],
   "name": "activity_weight",
-  "title": "Weight of single activity",
+  "title": "Activity Weight",
   "description": "",
   "_values": [
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "normal",
-      "label": "normal",
+      "name": "1",
+      "label": "1",
       "value": "1",
       "filter": "0",
       "is_reserved": "0",
@@ -17,8 +17,38 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "significant",
-      "label": "significant",
+      "name": "1_5",
+      "label": "1.5",
+      "value": "1.5",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "2",
+      "label": "2",
+      "value": "2",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "2_5",
+      "label": "2.5",
+      "value": "2.5",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "3",
+      "label": "3",
       "value": "3",
       "filter": "0",
       "is_reserved": "0",
