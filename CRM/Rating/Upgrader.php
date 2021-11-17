@@ -14,10 +14,12 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base {
     $customData = new CRM_Rating_CustomData(E::LONG_NAME);
     $customData->syncOptionGroup(E::path('resources/option_group_activity_class.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_score.json'));
-    $customData->syncOptionGroup(E::path('resources/option_group_activity_theme.json'));
+    $customData->syncOptionGroup(E::path('resources/option_group_activity_category.json'));
+    $customData->syncOptionGroup(E::path('resources/option_group_activity_subcategory.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_weight.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_type.json'));
-    $customData->syncCustomGroup(E::path('resources/custom_group_activity_factors.json'));
+    $customData->syncOptionGroup(E::path('resources/option_group_activity_vote.json'));
+    $customData->syncCustomGroup(E::path('resources/custom_group_political_activity_additional_fields.json'));
     $customData->syncCustomGroup(E::path('resources/custom_group_contact_results.json'));
 
   }
@@ -48,11 +50,12 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base {
    * @return TRUE on success
    * @throws Exception
    */
-  // public function upgrade_0010(): bool {
-  //   $this->ctx->log->info('Applying update 0010');
-  //   CRM_Core_DAO::executeQuery('UPDATE foo SET bar = "whiz"');
-  //   CRM_Core_DAO::executeQuery('DELETE FROM bang WHERE willy = wonka(2)');
-  //   return TRUE;
-  // }
+   // public function upgrade_0001()
+   // {
+   //     $this->ctx->log->info('Updating data structures');
+   //     $customData = new CRM_Rating_CustomData(E::LONG_NAME);
+   //     $customData->syncOptionGroup(E::path('resources/option_group_activity_type.json'));
+   //     return true;
+   // }
 
 }

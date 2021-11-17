@@ -1,0 +1,48 @@
+{
+  "_lookup": ["name"],
+  "name": "activity_vote",
+  "title": "Activity Vote",
+  "description": "",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "yes",
+      "label": "Yes",
+      "value": "1",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "no",
+      "label": "No",
+      "value": "2",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "abstention",
+      "label": "Abstention",
+      "value": "3",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "absent",
+      "label": "absent",
+      "value": "4",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    }
+  ]
+}
