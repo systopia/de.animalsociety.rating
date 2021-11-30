@@ -1,0 +1,28 @@
+{
+  "_lookup": ["name"],
+  "name": "contact_importance",
+  "title": "Contact importance",
+  "description": "",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "normal",
+      "label": "normal",
+      "value": "1",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "well-known",
+      "label": "well-known",
+      "value": "5",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    }
+  ]
+}

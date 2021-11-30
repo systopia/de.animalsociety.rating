@@ -1,7 +1,7 @@
 {
   "_lookup": ["name"],
-  "name": "activity_class",
-  "title": "Activity Class",
+  "name": "activity_kind",
+  "title": "Activity Kind",
   "description": "",
   "_values": [
     {
@@ -20,6 +20,16 @@
       "name": "speech",
       "label": "Speech",
       "value": "2",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "program_item",
+      "label": "Program item",
+      "value": "3",
       "filter": "0",
       "is_reserved": "0",
       "is_active": "1"

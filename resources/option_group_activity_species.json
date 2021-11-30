@@ -1,0 +1,28 @@
+{
+  "_lookup": ["name"],
+  "name": "activity_species",
+  "title": "Activity species",
+  "description": "",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "badgers",
+      "label": "Badgers",
+      "value": "1",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "cattle",
+      "label": "Cattle",
+      "value": "2",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    }
+  ]
+}
