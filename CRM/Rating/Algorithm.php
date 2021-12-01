@@ -1,4 +1,4 @@
-<?php
+contact_help_fields<?php
 /*-------------------------------------------------------+
 | AnimalSociety Rating Extension                         |
 | Copyright (C) 2021 SYSTOPIA                            |
@@ -22,19 +22,137 @@ use CRM_Rating_ExtensionUtil as E;
  */
 class CRM_Rating_Algorithm
 {
-    /** @var string custom field key for the overall score */
+    /** @var string custom field key for the activity type */
     const ACTIVITY_TYPE = 'political_activity';
 
+    /**
+     * Contact fields of contact_results custom group. Fields to be displayed
+     */
+
     /** @var string custom field key for the overall score */
-    const CONTACT_SCORE = 'contact_results.overall_score';
+    const OVERALL_RATING = 'contact_results.overall_rating';
+
+    /** @var string custom field key for the importance of a contact */
+    const CONTACT_IMPORTANCE = 'contact_results.contact_importance';
+
+    /** @var string custom field key for the livestock rating weighted */
+    const LIVESTOCK_RATING = 'contact_results.livestock_rating';
+
+    /** @var string custom field key for the aquaculture rating weighted */
+    const AQUACULTURE_RATING = 'contact_results.aquaculture_rating';
+
+    /** @var string custom field key for the animal testing rating weighted */
+    const ANIMAL_TESTING_RATING = 'contact_results.animal_testing_rating';
+
+    /** @var string custom field key for the animal_rights rating weighted */
+    const ANIMAL_RIGHTS_RATING = 'contact_results.animal_rights_rating';
+
+    /** @var string custom field key for the hunting_wildlife rating weighted */
+    const HUNTING_WILDLIFE_RATING = 'contact_results.hunting_wildlife_rating';
+
+    /** @var string custom field key for the pets rating weighted */
+    const PETS_RATING = 'contact_results.pets_rating';
+
+    /** @var string custom field key for the animals_entertainment rating weighted */
+    const ANIMALS_ENTERTAINMENT_RATING = 'contact_results.animals_entertainment_rating';
+
+    /** @var string custom field key for the food_consumer_protection rating weighted */
+    const FOOD_CONSUMER_PROTECTION_RATING = 'contact_results.food_consumer_protection_rating';
+
+    /**
+     * Contact fields of "contact_help_fields" custom group. Helper fields - not to be displayed
+     */
+
+    /** @var string custom field key for the overall rating weighted */
+    const OVERALL_RATING_WEIGHTED = 'contact_help_fields.overall_rating_weighted';
+
+    /** @var string custom field key for the livestock rating weighted */
+    const LIVESTOCK_RATING_WEIGHTED = 'contact_help_fields.livestock_rating_weighted';
+
+    /** @var string custom field key for the aquaculture rating weighted */
+    const AQUACULTURE_RATING_WEIGHTED = 'contact_help_fields.aquaculture_rating_weighted';
+
+    /** @var string custom field key for the animal testing rating weighted */
+    const ANIMAL_TESTING_RATING_WEIGHTED = 'contact_help_fields.animal_testing_rating_weighted';
+
+    /** @var string custom field key for the animal_rights rating weighted */
+    const ANIMAL_RIGHTS_RATING_WEIGHTED = 'contact_help_fields.animal_rights_rating_weighted';
+
+    /** @var string custom field key for the hunting_wildlife rating weighted */
+    const HUNTING_WILDLIFE_RATING_WEIGHTED = 'contact_help_fields.hunting_wildlife_rating_weighted';
+
+    /** @var string custom field key for the pets rating weighted */
+    const PETS_RATING_WEIGHTED = 'contact_help_fields.pets_rating_weighted';
+
+    /** @var string custom field key for the animals_entertainment rating weighted */
+    const ANIMALS_ENTERTAINMENT_RATING_WEIGHTED = 'contact_help_fields.animals_entertainment_rating_weighted';
+
+    /** @var string custom field key for the food_consumer_protection rating weighted */
+    const FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED = 'contact_help_fields.food_consumer_protection_rating_weighted';
+
+    /** @var string custom field key for the sum of all coefficients */
+    const SUM_COEFFICIENTS = 'contact_help_fields.sum_coefficients';
+
+    /** @var string custom field key for the livestock coefficents */
+    const LIVESTOCK_COEFFICENTS = 'contact_help_fields.livestock_coefficents';
+
+    /** @var string custom field key for the aquaculture coefficents */
+    const AQUACULTURE_COEFFICENTS = 'contact_help_fields.aquaculture_coefficents';
+
+    /** @var string custom field key for the animal testing coefficents */
+    const ANIMAL_TESTING_COEFFICENTS = 'contact_help_fields.animal_testing_coefficents';
+
+    /** @var string custom field key for the animal_rights coefficents */
+    const ANIMAL_RIGHTS_COEFFICENTS = 'contact_help_fields.animal_rights_coefficents';
+
+    /** @var string custom field key for the hunting_wildlife coefficents */
+    const HUNTING_WILDLIFE_COEFFICENTS = 'contact_help_fields.hunting_wildlife_coefficents';
+
+    /** @var string custom field key for the pets coefficents */
+    const PETS_COEFFICENTS = 'contact_help_fields.pets_coefficents';
+
+    /** @var string custom field key for the animals_entertainment coefficents */
+    const ANIMALS_ENTERTAINMENT_COEFFICENTS = 'contact_help_fields.animals_entertainment_coefficents';
+
+    /** @var string custom field key for the food_consumer_protection coefficents */
+    const FOOD_CONSUMER_PROTECTION_COEFFICENTS = 'contact_help_fields.food_consumer_protection_coefficents';
+
 
     /** @var array the list of fields that are relevant for the calculations */
     const RELEVANT_CONTACT_FIELDS = [
-        self::CONTACT_SCORE,
+    self::OVERALL_RATING,
+    self::CONTACT_IMPORTANCE,
+    self::CONTACT_IMPORTANCE,
+    self::LIVESTOCK_RATING,
+    self::AQUACULTURE_RATING,
+    self::ANIMAL_TESTING_RATING,
+    self::ANIMAL_RIGHTS_RATING,
+    self::HUNTING_WILDLIFE_RATING,
+    self::PETS_RATING,
+    self::ANIMALS_ENTERTAINMENT_RATING,
+    self::FOOD_CONSUMER_PROTECTION_RATING,
+    self::OVERALL_RATING_WEIGHTED,
+    self::LIVESTOCK_RATING_WEIGHTED,
+    self::AQUACULTURE_RATING_WEIGHTED,
+    self::ANIMAL_TESTING_RATING_WEIGHTED,
+    self::ANIMAL_RIGHTS_RATING_WEIGHTED,
+    self::HUNTING_WILDLIFE_RATING_WEIGHTED,
+    self::PETS_RATING_WEIGHTED,
+    self::ANIMALS_ENTERTAINMENT_RATING_WEIGHTED,
+    self::FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED,
+    self::SUM_COEFFICIENTS,
+    self::LIVESTOCK_COEFFICENTS,
+    self::AQUACULTURE_COEFFICENTS,
+    self::ANIMAL_TESTING_COEFFICENTS,
+    self::ANIMAL_RIGHTS_COEFFICENTS,
+    self::HUNTING_WILDLIFE_COEFFICENTS,
+    self::PETS_COEFFICENTS,
+    self::ANIMALS_ENTERTAINMENT_COEFFICENTS,
+    self::FOOD_CONSUMER_PROTECTION_COEFFICENTS
     ];
 
     /** @var string custom field key for the overall score */
-    const ACTIVITY_SCORE = 'political_activity_additional_fields.activity_score';
+    const ACTIVITY_SCORE = 'political_activity_additional_fields.rating_weighted';
 
     /** @var array the list of fields that are relevant for the calculations */
     const RELEVANT_ACTIVITY_FIELDS = [
@@ -77,11 +195,11 @@ class CRM_Rating_Algorithm
         }
 
         // step 5: check if the values need to be updated and do so
-        if ($example_calculated_score != $current_data[self::CONTACT_SCORE]) {
+        if ($example_calculated_score != $current_data[self::OVERALL_RATING]) {
             // update
             $contact_update = [
                 'id' => $contact_id,
-                self::CONTACT_SCORE => $example_calculated_score
+                self::OVERALL_RATING => $example_calculated_score
             ];
             CRM_Rating_CustomData::resolveCustomFields($contact_update);
             civicrm_api3('Contact', 'create', $contact_update);
