@@ -7,7 +7,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "animal_abandonment",
+      "name": "pets-animal_abandonment",
       "label": "Animal abandonment",
       "value": "1",
       "filter": "0",
@@ -17,7 +17,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "slaughter",
+      "name": "livestock-slaughter",
       "label": "Slaughter",
       "value": "2",
       "filter": "0",
@@ -27,7 +27,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "slaughter_pregnant_animals",
+      "name": "livestock-slaughter_pregnant_animals",
       "label": "Slaughter of pregnant animals",
       "value": "3",
       "filter": "0",
@@ -37,7 +37,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "war_animals",
+      "name": "animal_rights-war_animals",
       "label": "War animals",
       "value": "4",
       "filter": "0",
@@ -47,7 +47,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "chicks_killing",
+      "name": "livestock-chicks_killing",
       "label": "Chicks killing",
       "value": "5",
       "filter": "0",
@@ -57,7 +57,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "cage_keeping",
+      "name": "livestock-cage_keeping",
       "label": "Cage keeping",
       "value": "6",
       "filter": "0",
@@ -67,7 +67,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "cameras_in_slaughterhouses",
+      "name": "livestock-cameras_in_slaughterhouses",
       "label": "Cameras in slaughterhouses",
       "value": "7",
       "filter": "0",
@@ -77,7 +77,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "hunting",
+      "name": "wildlife-hunting",
       "label": "Hunting",
       "value": "8",
       "filter": "0",
@@ -87,7 +87,7 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "circus",
+      "name": "animals_entertainment-circus",
       "label": "Circus",
       "value": "9",
       "filter": "0",
@@ -97,9 +97,319 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
-      "name": "dolphinarium",
+      "name": "animals_entertainment-dolphinarium",
       "label": "Dolphinarium",
       "value": "10",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "wildlife-vermins",
+      "label": "Vermins",
+      "value": "11",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-electrical_stunning",
+      "label": "Electrical Stunning",
+      "value": "12",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-factory_farming",
+      "label": "Factory Farming",
+      "value": "13",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "food_consumer_protection-labelling",
+      "label": "Labelling",
+      "value": "14",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-co2_stunning",
+      "label": "CO2 Stunning",
+      "value": "15",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-fur",
+      "label": "Fur",
+      "value": "16",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-force_feeding",
+      "label": "Force Feeding",
+      "value": "17",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "wildlife-city_animals",
+      "label": "City Animals",
+      "value": "18",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "food_consumer_protection-veggie_menus",
+      "label": "Veggie Menus",
+      "value": "19",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-mutilation",
+      "label": "Mutilation",
+      "value": "20",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "aquaculture-sport_fishing",
+      "label": "Sport fishing",
+      "value": "21",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-live_plucking",
+      "label": "Live plucking",
+      "value": "22",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-protection_whistleblowers",
+      "label": "Protection of whistleblowers",
+      "value": "23",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-education",
+      "label": "Education",
+      "value": "24",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "pets-reproduction_control",
+      "label": "Reproduction control",
+      "value": "25",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "pets-pet_trade",
+      "label": "Pet trade",
+      "value": "26",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "wildlife-wildlife_trade",
+      "label": "Wildlife trade",
+      "value": "27",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-transport",
+      "label": "Transport",
+      "value": "28",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animals_entertainment-zoo",
+      "label": "Zoo",
+      "value": "29",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-leather",
+      "label": "Leather",
+      "value": "30",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-live_animal_transport",
+      "label": "Live animal transport",
+      "value": "31",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-reduction_of_animal_population",
+      "label": "Reduction of the animal population",
+      "value": "32",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "livestock-new_buildings",
+      "label": "New buildings",
+      "value": "33",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-emergency_killings",
+      "label": "Emergency killings",
+      "value": "34",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-torture_breeding",
+      "label": "Torture breeding",
+      "value": "35",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-control_enforcement",
+      "label": "Control and enforcement",
+      "value": "36",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "food_consumer_protection-medication_use",
+      "label": "Medication use",
+      "value": "37",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-right_association",
+      "label": "Right of association",
+      "value": "38",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-animal_welfare_officer",
+      "label": "Animal welfare officer",
+      "value": "39",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "animal_rights-wildlife_road_traffic",
+      "label": "Wildlife and road traffic",
+      "value": "40",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "pets-animal_shelters",
+      "label": "Animal shelters",
+      "value": "41",
       "filter": "0",
       "is_reserved": "0",
       "is_active": "1"
