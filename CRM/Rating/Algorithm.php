@@ -152,11 +152,25 @@ class CRM_Rating_Algorithm
     ];
 
     /** @var string custom field key for the overall score */
-    const ACTIVITY_SCORE = 'political_activity_additional_fields.rating_weighted';
+    const ACTIVITY_KIND = 'political_activity_additional_fields.kind';
+
+    /** @var string custom field key for the overall score */
+    const ACTIVITY_SCORE = 'political_activity_additional_fields.score';
+
+    /** @var string custom field key for the overall score */
+    const ACTIVITY_WEIGHT = 'political_activity_additional_fields.weight';
+
+    /** @var string custom field key for the overall score */
+    const ACTIVITY_RATING_WEIGHTED = 'political_activity_additional_fields.rating_weighted';
+
+
 
     /** @var array the list of fields that are relevant for the calculations */
     const RELEVANT_ACTIVITY_FIELDS = [
+        self::ACTIVITY_KIND,
         self::ACTIVITY_SCORE,
+        self::ACTIVITY_WEIGHT,
+        self::ACTIVITY_RATING_WEIGHTED,
         'activity_date_time',
         'status_id'
     ];
