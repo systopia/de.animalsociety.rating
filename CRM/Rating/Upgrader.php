@@ -31,6 +31,7 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base {
     $customData->syncOptionGroup(E::path('resources/option_group_activity_kind.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_score.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_species.json'));
+    $customData->syncOptionGroup(E::path('resources/option_group_activity_status.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_subcategory.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_type.json'));
     $customData->syncOptionGroup(E::path('resources/option_group_activity_vote.json'));
