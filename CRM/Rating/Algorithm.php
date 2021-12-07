@@ -151,16 +151,16 @@ class CRM_Rating_Algorithm
     self::FOOD_CONSUMER_PROTECTION_COEFFICENTS
     ];
 
-    /** @var string custom field key for the overall score */
+    /** @var string custom field key for the activity kind */
     const ACTIVITY_KIND = 'political_activity_additional_fields.kind';
 
-    /** @var string custom field key for the overall score */
+    /** @var string custom field key for the score of the single activity */
     const ACTIVITY_SCORE = 'political_activity_additional_fields.score';
 
-    /** @var string custom field key for the overall score */
+    /** @var string custom field key for the weight of the activity */
     const ACTIVITY_WEIGHT = 'political_activity_additional_fields.weight';
 
-    /** @var string custom field key for the overall score */
+    /** @var string custom field key for the weighted rating of the activity */
     const ACTIVITY_RATING_WEIGHTED = 'political_activity_additional_fields.rating_weighted';
 
 
