@@ -1,4 +1,4 @@
-contact_help_fields<?php
+<?php
 /*-------------------------------------------------------+
 | AnimalSociety Rating Extension                         |
 | Copyright (C) 2021 SYSTOPIA                            |
