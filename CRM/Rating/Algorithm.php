@@ -25,6 +25,9 @@ class CRM_Rating_Algorithm
     /** @var string custom field key for the activity type */
     const ACTIVITY_TYPE = 'political_activity';
 
+    /** @var string custom field key for the activity status */
+    const ACTIVITY_STATUS = 'published';
+
     /**
      * Contact fields of contact_results custom group. Fields to be displayed
      */
@@ -122,7 +125,6 @@ class CRM_Rating_Algorithm
     const RELEVANT_CONTACT_FIELDS = [
     self::OVERALL_RATING,
     self::CONTACT_IMPORTANCE,
-    self::CONTACT_IMPORTANCE,
     self::LIVESTOCK_RATING,
     self::AQUACULTURE_RATING,
     self::ANIMAL_TESTING_RATING,
@@ -171,8 +173,8 @@ class CRM_Rating_Algorithm
         self::ACTIVITY_SCORE,
         self::ACTIVITY_WEIGHT,
         self::ACTIVITY_RATING_WEIGHTED,
-        'activity_date_time',
-        'status_id'
+        self::ACTIVITY_STATUS,
+        'activity_date_time'
     ];
 
     /**
@@ -183,6 +185,7 @@ class CRM_Rating_Algorithm
      *
      * @throws \CiviCRM_API3_Exception if something's wrong
      */
+
     public static function updateContact(int $contact_id)
     {
         // step 1: fetch the contact data
@@ -197,28 +200,35 @@ class CRM_Rating_Algorithm
         $activities = civicrm_api3('Activity', 'get', [
             'option.limit' => 0,
             'activity_type_id' => self::ACTIVITY_TYPE,
+            'status_id' => self::ACTIVITY_STATUS,
             'target_contact_id' => $contact_id,
             'return' => self::getResolvedFieldList(self::RELEVANT_ACTIVITY_FIELDS)
         ])['values'];
 
-        // step 4: recalculate values
+        // step 3: get current date & recalculate values
+        $current_date = date('y-m-d h:i:s');
         $example_calculated_score = 0.0;
         foreach ($activities as $activity) {
             CRM_Rating_CustomData::labelCustomFields($activity);
-            $example_calculated_score += $activity[self::ACTIVITY_SCORE];
+            $time_interval = $activity.activity_date_time->diff($current_date);
+            $f_temp_gewichtung = 0.75 / (((($time_interval)/365)/2.9)^4 + 1) + .25;
+            //hier muss eigentlich noch ein mapping hin für kind, weight und score:
+            self::ACTIVITY_RATING_WEIGHTED = self::ACTIVITY_KIND * self::ACTIVITY_SCORE * self::ACTIVITY_WEIGHT * $f_temp_gewichtung;
+
+            //$example_calculated_score += $activity[self::ACTIVITY_RATING_WEIGHTED]; ?
         }
 
-        // step 5: check if the values need to be updated and do so
+        // step 4: check if the values need to be updated and do so
         if ($example_calculated_score != $current_data[self::OVERALL_RATING]) {
-            // update
+           // update
             $contact_update = [
-                'id' => $contact_id,
-                self::OVERALL_RATING => $example_calculated_score
-            ];
-            CRM_Rating_CustomData::resolveCustomFields($contact_update);
+               'id' => $contact_id,
+               self::OVERALL_RATING => $example_calculated_score
+           ];
+           CRM_Rating_CustomData::resolveCustomFields($contact_update);
             civicrm_api3('Contact', 'create', $contact_update);
-            Civi::log()->debug("Contact [{$contact_id}] updated.");
-        } else {
+           Civi::log()->debug("Contact [{$contact_id}] updated.");
+       } else {
             Civi::log()->debug("Contact [{$contact_id}] NOT updated (score hasn't changed).");
         }
     }
