@@ -278,10 +278,12 @@ use CRM_Rating_ExtensionUtil as E;
 
 
     public static function write_rating_weighted($activity_id, $rating_weighted) {
-        $result = civicrm_api3('Activity', 'create', [
+        $activity_data = [
             'id' => $activity_id,
             self::ACTIVITY_RATING_WEIGHTED => $rating_weighted,
-        ]);
+        ];
+        CRM_Rating_CustomData::resolveCustomFields($activity_data);
+        $result = civicrm_api3('Activity', 'create', $activity_data );
     }
 
 
