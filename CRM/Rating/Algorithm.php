@@ -120,13 +120,20 @@ use CRM_Rating_ExtensionUtil as E;
     /** @var string custom field key for the food_consumer_protection coefficents */
     const FOOD_CONSUMER_PROTECTION_COEFFICENTS = 'contact_help_fields.food_consumer_protection_coefficents';
 
-    /** @var array @var list of activity kind weights */
+    /** @var array @var list of activity kind coefficient */
     const ACTIVITY_KIND_MAPPING = [
         1 => 1, // public communication
         2 => 2, // speech
+        3 => 3, // program item
+        4 => 4, // Extra-parliamentary work
+        5 => 5, // Parliamentary question
+        6 => 6, // participation draft law
+        7 => 7, // Vote on subsidies
+        8 => 7, // Vote on public contract
+        10 => 10, // Vote on draft law
     ];
 
-    /** @var array Mapping for weight properties */
+    /** @var array Mapping for weight coefficient */
     const ACTIVITY_WEIGHT_MAPPING = [
         1 => 1,
         1.5 => 1.5,
@@ -135,6 +142,7 @@ use CRM_Rating_ExtensionUtil as E;
         3 => 3
     ];
 
+    /** @var array Mapping of score  */
     const ACTIVITY_SCORE_MAPPING = [
         0 => 0,     // bad
         3 => 3,     // rather bad
@@ -227,20 +235,23 @@ use CRM_Rating_ExtensionUtil as E;
             CRM_Rating_CustomData::labelCustomFields($activity);
             $activity_kind_coefficient = self::ACTIVITY_KIND_MAPPING[$activity[self::ACTIVITY_KIND]];
             $activity_weight_coefficient = self::ACTIVITY_WEIGHT_MAPPING[$activity[self::ACTIVITY_WEIGHT]];
+            // $time_interval = activity_date_time->diff($current_date);
+            // $time_coefficient =  0.75 / (((($time_interval)/365)/2.9)^4 + 1) + .25;
             $activity_score = self::ACTIVITY_SCORE_MAPPING[$activity[self::ACTIVITY_SCORE]];
 
             $activity_rating_weighted = $activity_kind_coefficient * $activity_weight_coefficient * $activity_score;
-            self::write_rating_weighted($activity['id'], $activity_rating_weighted );
-
-            //            $time_interval = $activity.activity_date_time->diff($current_date);
-//            $f_temp_gewichtung = 0.75 / (((($time_interval)/365)/2.9)^4 + 1) + .25;
-            //hier muss eigentlich noch ein mapping hin für kind, weight und score:
-//            $tmp = self::ACTIVITY_KIND * self::ACTIVITY_SCORE * self::ACTIVITY_WEIGHT * $f_temp_gewichtung;
+            self::write_rating_weighted($activity['id'], $activity_rating_weighted);
 
             //$example_calculated_score += $activity[self::ACTIVITY_RATING_WEIGHTED]; ?
         }
 
+        // step 3.1: aggregate activities to contact
+
+
+
         // step 4: check if the values need to be updated and do so
+
+
         if ($example_calculated_score != $current_data[self::OVERALL_RATING]) {
            // update
             $contact_update = [
@@ -276,6 +287,26 @@ use CRM_Rating_ExtensionUtil as E;
         return $current_data;
     }
 
+        /**
+         * fetches the relevant activities to given contact with specified
+         * return values (self::RELEVANT_ACTIVITY_FIELDS)
+         *
+         * @param $contact_id
+         *
+         * @return mixed
+         * @throws \CiviCRM_API3_Exception
+         */
+        public static function fetch_relevant_activities($contact_id) {
+            $activities = civicrm_api3('Activity', 'get', [
+                'option.limit' => 0,
+                'activity_type_id' => self::ACTIVITY_TYPE,
+                'status_id' => self::ACTIVITY_STATUS,
+                'target_contact_id' => $contact_id,
+                'return' => self::getResolvedFieldList(self::RELEVANT_ACTIVITY_FIELDS)
+            ]);
+            return $activities['values'];
+        }
+
 
     public static function write_rating_weighted($activity_id, $rating_weighted) {
         $activity_data = [
@@ -287,25 +318,9 @@ use CRM_Rating_ExtensionUtil as E;
     }
 
 
-    /**
-     * fetches the relevant activities to given contact with specified
-     * return values (self::RELEVANT_ACTIVITY_FIELDS)
-     *
-     * @param $contact_id
-     *
-     * @return mixed
-     * @throws \CiviCRM_API3_Exception
-     */
-    public static function fetch_relevant_activities($contact_id) {
-        $activities = civicrm_api3('Activity', 'get', [
-            'option.limit' => 0,
-            'activity_type_id' => self::ACTIVITY_TYPE,
-            'status_id' => self::ACTIVITY_STATUS,
-            'target_contact_id' => $contact_id,
-            'return' => self::getResolvedFieldList(self::RELEVANT_ACTIVITY_FIELDS)
-        ]);
-        return $activities['values'];
-    }
+    public static function update_contact
+
+
 
     /**
      * Translates the field list in the 'group_name.field_name' notation to the custom_xx notation
