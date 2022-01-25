@@ -96,29 +96,29 @@ use CRM_Rating_ExtensionUtil as E;
     /** @var string custom field key for the sum of all coefficients */
     const SUM_COEFFICIENTS = 'contact_help_fields.sum_coefficients';
 
-    /** @var string custom field key for the livestock coefficents */
-    const LIVESTOCK_COEFFICENTS = 'contact_help_fields.livestock_coefficents';
+    /** @var string custom field key for the livestock coefficients */
+    const LIVESTOCK_COEFFICIENTS = 'contact_help_fields.livestock_coefficients';
 
-    /** @var string custom field key for the aquaculture coefficents */
-    const AQUACULTURE_COEFFICENTS = 'contact_help_fields.aquaculture_coefficents';
+    /** @var string custom field key for the aquaculture coefficients */
+    const AQUACULTURE_COEFFICIENTS = 'contact_help_fields.aquaculture_coefficients';
 
-    /** @var string custom field key for the animal testing coefficents */
-    const ANIMAL_TESTING_COEFFICENTS = 'contact_help_fields.animal_testing_coefficents';
+    /** @var string custom field key for the animal testing coefficients */
+    const ANIMAL_TESTING_COEFFICIENTS = 'contact_help_fields.animal_testing_coefficients';
 
-    /** @var string custom field key for the animal_rights coefficents */
-    const ANIMAL_RIGHTS_COEFFICENTS = 'contact_help_fields.animal_rights_coefficents';
+    /** @var string custom field key for the animal_rights coefficients */
+    const ANIMAL_RIGHTS_COEFFICIENTS = 'contact_help_fields.animal_rights_coefficients';
 
-    /** @var string custom field key for the hunting_wildlife coefficents */
-    const HUNTING_WILDLIFE_COEFFICENTS = 'contact_help_fields.hunting_wildlife_coefficents';
+    /** @var string custom field key for the hunting_wildlife coefficients */
+    const HUNTING_WILDLIFE_COEFFICIENTS = 'contact_help_fields.hunting_wildlife_coefficients';
 
-    /** @var string custom field key for the pets coefficents */
-    const PETS_COEFFICENTS = 'contact_help_fields.pets_coefficents';
+    /** @var string custom field key for the pets coefficients */
+    const PETS_COEFFICIENTS = 'contact_help_fields.pets_coefficients';
 
-    /** @var string custom field key for the animals_entertainment coefficents */
-    const ANIMALS_ENTERTAINMENT_COEFFICENTS = 'contact_help_fields.animals_entertainment_coefficents';
+    /** @var string custom field key for the animals_entertainment coefficients */
+    const ANIMALS_ENTERTAINMENT_COEFFICIENTS = 'contact_help_fields.animals_entertainment_coefficients';
 
-    /** @var string custom field key for the food_consumer_protection coefficents */
-    const FOOD_CONSUMER_PROTECTION_COEFFICENTS = 'contact_help_fields.food_consumer_protection_coefficents';
+    /** @var string custom field key for the food_consumer_protection coefficients */
+    const FOOD_CONSUMER_PROTECTION_COEFFICIENTS = 'contact_help_fields.food_consumer_protection_coefficients';
 
     /** @var array @var list of activity kind coefficient */
     const ACTIVITY_KIND_MAPPING = [
@@ -153,34 +153,34 @@ use CRM_Rating_ExtensionUtil as E;
 
     /** @var array the list of fields that are relevant for the calculations */
     const RELEVANT_CONTACT_FIELDS = [
-    self::OVERALL_RATING,
-    self::CONTACT_IMPORTANCE,
-    self::LIVESTOCK_RATING,
-    self::AQUACULTURE_RATING,
-    self::ANIMAL_TESTING_RATING,
-    self::ANIMAL_RIGHTS_RATING,
-    self::HUNTING_WILDLIFE_RATING,
-    self::PETS_RATING,
-    self::ANIMALS_ENTERTAINMENT_RATING,
-    self::FOOD_CONSUMER_PROTECTION_RATING,
-    self::OVERALL_RATING_WEIGHTED,
-    self::LIVESTOCK_RATING_WEIGHTED,
-    self::AQUACULTURE_RATING_WEIGHTED,
-    self::ANIMAL_TESTING_RATING_WEIGHTED,
-    self::ANIMAL_RIGHTS_RATING_WEIGHTED,
-    self::HUNTING_WILDLIFE_RATING_WEIGHTED,
-    self::PETS_RATING_WEIGHTED,
-    self::ANIMALS_ENTERTAINMENT_RATING_WEIGHTED,
-    self::FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED,
-    self::SUM_COEFFICIENTS,
-    self::LIVESTOCK_COEFFICENTS,
-    self::AQUACULTURE_COEFFICENTS,
-    self::ANIMAL_TESTING_COEFFICENTS,
-    self::ANIMAL_RIGHTS_COEFFICENTS,
-    self::HUNTING_WILDLIFE_COEFFICENTS,
-    self::PETS_COEFFICENTS,
-    self::ANIMALS_ENTERTAINMENT_COEFFICENTS,
-    self::FOOD_CONSUMER_PROTECTION_COEFFICENTS
+        self::OVERALL_RATING,
+        self::CONTACT_IMPORTANCE,
+        self::LIVESTOCK_RATING,
+        self::AQUACULTURE_RATING,
+        self::ANIMAL_TESTING_RATING,
+        self::ANIMAL_RIGHTS_RATING,
+        self::HUNTING_WILDLIFE_RATING,
+        self::PETS_RATING,
+        self::ANIMALS_ENTERTAINMENT_RATING,
+        self::FOOD_CONSUMER_PROTECTION_RATING,
+        self::OVERALL_RATING_WEIGHTED,
+        self::LIVESTOCK_RATING_WEIGHTED,
+        self::AQUACULTURE_RATING_WEIGHTED,
+        self::ANIMAL_TESTING_RATING_WEIGHTED,
+        self::ANIMAL_RIGHTS_RATING_WEIGHTED,
+        self::HUNTING_WILDLIFE_RATING_WEIGHTED,
+        self::PETS_RATING_WEIGHTED,
+        self::ANIMALS_ENTERTAINMENT_RATING_WEIGHTED,
+        self::FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED,
+        self::SUM_COEFFICIENTS,
+        self::LIVESTOCK_COEFFICIENTS,
+        self::AQUACULTURE_COEFFICIENTS,
+        self::ANIMAL_TESTING_COEFFICIENTS,
+        self::ANIMAL_RIGHTS_COEFFICIENTS,
+        self::HUNTING_WILDLIFE_COEFFICIENTS,
+        self::PETS_COEFFICIENTS,
+        self::ANIMALS_ENTERTAINMENT_COEFFICIENTS,
+        self::FOOD_CONSUMER_PROTECTION_COEFFICIENTS
     ];
 
     /** @var string custom field key for the activity kind */
@@ -316,10 +316,6 @@ use CRM_Rating_ExtensionUtil as E;
         CRM_Rating_CustomData::resolveCustomFields($activity_data);
         $result = civicrm_api3('Activity', 'create', $activity_data );
     }
-
-
-    public static function update_contact
-
 
 
     /**
