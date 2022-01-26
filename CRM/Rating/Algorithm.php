@@ -23,21 +23,70 @@ use CRM_Rating_ExtensionUtil as E;
 class CRM_Rating_Algorithm extends CRM_Rating_Base
 {
     /**
-     * Update an individual contact based on it's activities
+     * Update the activities connected this the given contacts based on it's activities
      *
-     * @param integer $contact_id
-     *   ID of the contact to be updated
+     * @param array $contact_ids
+     *   IDs of the contact to be updated
+     *
+     * @param bool $update_individuals
+     *   should the individuals these activities' rating depends on also be updated?
      *
      * @throws \CiviCRM_API3_Exception if something's wrong
      */
+    public static function updateContactActivities(array $contact_ids, bool $update_individuals = false)
+    {
+        $activities = self::fetch_relevant_contact_activities($contact_ids);
 
-    public static function updateContact(int $contact_id)
+
+        if ($update_individuals) {
+            self::updateIndividuals($contact_ids);
+        }
+    }
+
+    /**
+     * Update an individual contact based on it's activities
+     *
+     * @param array $contact_ids
+     *   IDs of the contact to be updated
+     *
+     * @param bool $update_individuals
+     *   should the individuals these activities' rating depends on also be updated?
+     *
+     * @throws \CiviCRM_API3_Exception if something's wrong
+     */
+    public static function updateActivities(array $activity_ids, $update_individuals = false)
+    {
+
+    }
+
+
+    /**
+     * Update individual contacts based on it's activities
+     *
+     * @param array $contact_ids
+     *   IDs of the contact to be updated
+     *
+     * @param bool $update_activities
+     *   should the activities the individuals' rating depends on also be updated?
+     *
+     * @param bool $update_organisations
+     *   should the organisation that depends this individual's rating also be updated?
+
+     * @throws \CiviCRM_API3_Exception if something's wrong
+     */
+    public static function updateIndividuals(array $contact_ids, $update_activities = false, $update_organisations = false)
     {
         // step 1: fetch the contact data
-        $current_data = self::fetch_contact_data($contact_id);
+        $current_data = self::fetch_contact_data($contact_ids);
 
         // step 2: fetch all relevant activities
-        $activities = self::fetch_relevant_activities($contact_id);
+        if ($update_activities) {
+            // first update the activities
+            self::updateActivities()
+            self::updateIndividuals()
+            $activities = self::fetch_relevant_activities($contact_id);
+
+        }
 
 
         // step 3: get current date & recalculate values
@@ -88,19 +137,21 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
     /**
      * Fetches contact_data with needed rating parameters
      *
-     * @param $contact_id
+     * @param array $contact_ids
+     *   list of integers identifying the contacts
      *
      * @return array
      * @throws \CiviCRM_API3_Exception
      */
-    public static function fetch_contact_data($contact_id)
+    public static function fetch_contact_data(array $contact_ids)
     {
         $current_data_query = [
-            'id' => $contact_id,
+            'option.limit' => 0,
+            'id' => ['IN' => $contact_ids],
             'return' => self::getResolvedFieldList(self::RELEVANT_CONTACT_FIELDS),
         ];
-        $current_data = civicrm_api3('Contact', 'getsingle', $current_data_query);
-        CRM_Rating_CustomData::labelCustomFields($current_data);
+        $current_data = civicrm_api3('Contact', 'get', $current_data_query)['values'];
+        CRM_Rating_CustomData::labelCustomFields($current_data, 2);
         return $current_data;
     }
 
@@ -108,21 +159,45 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
      * fetches the relevant activities to given contact with specified
      * return values (self::RELEVANT_ACTIVITY_FIELDS)
      *
-     * @param $contact_id
+     * @param array $activity_ids
+     *   list of integers identifying the activities
      *
-     * @return mixed
+     * @return array
      * @throws \CiviCRM_API3_Exception
      */
-    public static function fetch_relevant_activities($contact_id)
+    public static function fetch_relevant_activities($activity_ids)
+    {
+        // basic query
+        $current_data_query = [
+            'id' => ['IN' => $activity_ids],
+            'return' => self::getResolvedFieldList(self::RELEVANT_ACTIVITY_FIELDS),
+        ];
+
+        $current_data = civicrm_api3('Activity', 'get', $current_data_query)['values'];
+        CRM_Rating_CustomData::labelCustomFields($current_data, 2);
+        return $current_data;
+    }
+
+    /**
+     * Fetches all relevant activities for the given contact
+     *
+     * @param array $contact_ids
+     *   list of integers identifying the contacts
+     *
+     * @return array
+     * @throws \CiviCRM_API3_Exception
+     */
+    public static function fetch_relevant_contact_activities($contact_ids)
     {
         $activities = civicrm_api3('Activity', 'get', [
             'option.limit' => 0,
             'activity_type_id' => self::ACTIVITY_TYPE,
             'status_id' => self::ACTIVITY_STATUS,
-            'target_contact_id' => $contact_id,
+            'target_contact_id' => ['IN' => $contact_ids],
             'return' => self::getResolvedFieldList(self::RELEVANT_ACTIVITY_FIELDS),
-        ]);
-        return $activities['values'];
+        ])['values'];
+        CRM_Rating_CustomData::labelCustomFields($activities, 2);
+        return $activities;
     }
 
     /**

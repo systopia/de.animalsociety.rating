@@ -123,18 +123,18 @@ function _civicrm_api3_rating_update_spec(&$spec)
         $entity_ids = array_map('intval', $entity_ids);
 
         switch (strtolower($params['entity_type'])) {
-            case 'contact':
-                CRM_Rating_Algorithm::updateContacts($params['contact_id']);
-                break;
-
             case 'activity':
                 CRM_Rating_Algorithm::updateActivities($params['contact_id']);
+                break;
+
+            default:
+            case 'contact':
+                CRM_Rating_Algorithm::updateIndividuals($params['contact_id']);
                 break;
 
             case 'organisation':
                 CRM_Rating_Algorithm::updateOrganisations($params['contact_id']);
                 break;
-
         }
         return civicrm_api3_create_success();
     }
