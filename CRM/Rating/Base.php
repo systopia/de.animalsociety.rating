@@ -138,11 +138,11 @@ abstract class CRM_Rating_Base
 
     /** @var array Mapping for weight coefficient */
     const ACTIVITY_WEIGHT_MAPPING = [
-        1 => 1,
-        1.5 => 1.5,
-        2 => 2,
-        2.5 => 2.5,
-        3 => 3
+        10 => 1,
+        15 => 1.5,
+        20 => 2,
+        25 => 2.5,
+        30 => 3
     ];
 
     /** @var array Mapping of score  */
@@ -187,16 +187,19 @@ abstract class CRM_Rating_Base
     ];
 
     /** @var string custom field key for the activity kind */
-    const ACTIVITY_KIND = 'political_activity_additional_fields.kind';
+    const ACTIVITY_GROUP = 'political_activity_additional_fields';
+
+    /** @var string custom field key for the activity kind */
+    const ACTIVITY_KIND = 'political_activity_additional_fields.rating_kind';
 
     /** @var string custom field key for the score of the single activity */
-    const ACTIVITY_SCORE = 'political_activity_additional_fields.score';
+    const ACTIVITY_SCORE = 'political_activity_additional_fields.rating_score';
 
     /** @var string custom field key for the weight of the activity */
-    const ACTIVITY_WEIGHT = 'political_activity_additional_fields.weight';
+    const ACTIVITY_WEIGHT = 'political_activity_additional_fields.rating_weight';
 
     /** @var string custom field key for the weighted rating of the activity */
-    const ACTIVITY_RATING_WEIGHTED = 'political_activity_additional_fields.rating_weighted';
+    const ACTIVITY_RATING_WEIGHTED = 'political_activity_additional_fields.rating_rating_weighted';
 
     /** @var array the list of fields that are relevant for the calculations */
     const RELEVANT_ACTIVITY_FIELDS = [
@@ -207,6 +210,48 @@ abstract class CRM_Rating_Base
         self::ACTIVITY_STATUS,
         'activity_date_time'
     ];
+
+    /**
+     * Get the rating activity type ID
+     *
+     * @return integer
+     *   activity type id
+     *
+     * @throws \CiviCRM_API3_Exception if the activity type doesn't exist
+     */
+    public static function getRatingActivityTypeID() : int
+    {
+        static $activity_type_id = null;
+        if ($activity_type_id == null) {
+            $activity_type_id = (int) civicrm_api3('OptionValue', 'getvalue', [
+                'return' => 'value',
+                'option_group_id' => 'activity_type',
+                'name' => self::ACTIVITY_TYPE
+            ]);
+        }
+        return $activity_type_id;
+    }
+
+    /**
+     * Get the activity status ID for 'published'
+     *
+     * @return integer
+     *   activity status id
+     *
+     * @throws \CiviCRM_API3_Exception if the activity type doesn't exist
+     */
+    public static function getRatingActivityStatusPublished()
+    {
+        static $activity_status_published_id = null;
+        if ($activity_status_published_id == null) {
+            $activity_status_published_id = (int) civicrm_api3('OptionValue', 'getvalue', [
+                'return' => 'value',
+                'option_group_id' => 'activity_status',
+                'name' => 'published'
+            ]);
+        }
+        return $activity_status_published_id;
+    }
 
     /**
      * Translates the field list in the 'group_name.field_name' notation to the custom_xx notation
@@ -222,5 +267,16 @@ abstract class CRM_Rating_Base
         $field_names_as_keys = array_flip($field_list);
         CRM_Rating_CustomData::resolveCustomFields($field_names_as_keys);
         return array_flip($field_names_as_keys);
+    }
+
+    /**
+     * Log the given status message
+     *
+     * @param string $message
+     */
+    public static function log($message)
+    {
+        // todo: have a separate log file?
+        Civi::log()->debug($message);
     }
 }

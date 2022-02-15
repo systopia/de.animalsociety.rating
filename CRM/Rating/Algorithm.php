@@ -23,6 +23,42 @@ use CRM_Rating_ExtensionUtil as E;
 class CRM_Rating_Algorithm extends CRM_Rating_Base
 {
     /**
+     * Update an individual contact based on it's activities
+     *
+     * @param array|string $activity_ids
+     *   IDs of the activities to be updated, or 'all'
+     *
+     * @throws Exception
+     *   if something's wrong with the algorithm or the data structures
+     */
+    public static function updateActivities($activity_ids = 'all')
+    {
+        $timestamp = microtime(true);
+        $query = CRM_Rating_SqlQueries::getActivityScoreUpdateQuery($activity_ids);
+        CRM_Core_DAO::executeQuery($query);
+        $runtime = microtime(true) - $timestamp;
+        $count = $activity_ids == 'all' ? 'all' : count($activity_ids);
+        self::log("Updating {$count} activities took {$runtime} seconds.");
+    }
+
+    /**
+     * Update an individual contact based on it's activities
+     *
+     * @param array $contact_ids
+     *   IDs of the contact to be updated
+     *
+     * @throws \CiviCRM_API3_Exception if something's wrong
+     */
+    public static function updateAllActivities(array $activity_ids)
+    {
+        // todo
+    }
+
+
+
+
+
+    /**
      * Update the activities connected this the given contacts based on it's activities
      *
      * @param array $contact_ids
@@ -35,28 +71,13 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
      */
     public static function updateContactActivities(array $contact_ids, bool $update_individuals = false)
     {
+
         $activities = self::fetch_relevant_contact_activities($contact_ids);
 
 
         if ($update_individuals) {
             self::updateIndividuals($contact_ids);
         }
-    }
-
-    /**
-     * Update an individual contact based on it's activities
-     *
-     * @param array $contact_ids
-     *   IDs of the contact to be updated
-     *
-     * @param bool $update_individuals
-     *   should the individuals these activities' rating depends on also be updated?
-     *
-     * @throws \CiviCRM_API3_Exception if something's wrong
-     */
-    public static function updateActivities(array $activity_ids, $update_individuals = false)
-    {
-
     }
 
 
@@ -82,8 +103,8 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
         // step 2: fetch all relevant activities
         if ($update_activities) {
             // first update the activities
-            self::updateActivities()
-            self::updateIndividuals()
+//            self::updateActivities()
+//            self::updateIndividuals()
             $activities = self::fetch_relevant_activities($contact_id);
 
         }

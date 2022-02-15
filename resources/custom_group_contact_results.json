@@ -2,15 +2,16 @@
   "_lookup": ["name"],
   "_translate": ["title"],
   "name": "contact_results",
-  "title": "Contact Result Fields",
+  "title": "Rating",
   "extends": "Contact",
-  "collapse_display": "1",
+  "collapse_display": "0",
   "is_active": "1",
   "is_multiple": "0",
-  "style": "Inline",
+  "style": "Tab",
   "table_name": "civicrm_value_contact_results",
   "collapse_adv_display": "0",
   "is_reserved": "0",
+  "icon": "fa-paw",
   "_fields": [
     {
       "_lookup": ["column_name", "custom_group_id"],
@@ -25,7 +26,7 @@
       "is_searchable": "1",
       "is_search_range": "0",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -41,7 +42,7 @@
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -50,14 +51,14 @@
       "weight": "3",
       "name": "livestock_rating",
       "column_name": "livestock_rating",
-      "label": "livestock rating",
+      "label": "Livestock rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -66,14 +67,14 @@
       "weight": "4",
       "name": "aquaculture_rating",
       "column_name": "aquaculture_rating",
-      "label": "aquaculture rating",
+      "label": "Aquaculture rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -82,14 +83,14 @@
       "weight": "5",
       "name": "animal_testing_rating",
       "column_name": "animal_testing_rating",
-      "label": "animal testing rating",
+      "label": "Animal testing rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -98,14 +99,14 @@
       "weight": "6",
       "name": "animal_rights_rating",
       "column_name": "animal_rights_rating",
-      "label": "animal rights rating",
+      "label": "Animal rights rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -114,14 +115,14 @@
       "weight": "7",
       "name": "hunting_wildlife_rating",
       "column_name": "hunting_wildlife_rating",
-      "label": "hunting & wildlife rating",
+      "label": "Hunting & wildlife rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -130,14 +131,14 @@
       "weight": "8",
       "name": "pets_rating",
       "column_name": "pets_rating",
-      "label": "pets rating",
+      "label": "Pets rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -146,14 +147,14 @@
       "weight": "9",
       "name": "animals_entertainment_rating",
       "column_name": "animals_entertainment_rating",
-      "label": "animals in entertainment rating",
+      "label": "Animals in entertainment rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     },
     {
@@ -162,14 +163,14 @@
       "weight": "10",
       "name": "food_consumer_protection_rating",
       "column_name": "food_consumer_protection_rating",
-      "label": "food & consumer protection rating",
+      "label": "Food & consumer protection rating",
       "data_type": "Float",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
       "is_search_range": "1",
       "is_active": "1",
-      "is_view": "0",
+      "is_view": "1",
       "in_selector": "1"
     }
   ]
