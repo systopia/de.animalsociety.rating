@@ -47,6 +47,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
         );
 
+        // make sure there is an entry for all
+        self::createMissingActivityCustomData();
+
         // gather some values
         $activity_status_id = (int) CRM_Rating_Algorithm::getRatingActivityStatusPublished();
         $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
@@ -150,7 +153,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      * @throws Exception
      *   if something's wrong with the expected data structure
      */
-    public static function getContactAggregationUpdateQuery($contact_ids = 'all', $contact_type = 'Individual')
+    public static function runContactAggregationUpdateQuery($contact_ids = 'all', $contact_type = 'Individual')
     {
         // extract contact ID restrictions
         if ($contact_ids != 'all') {
@@ -208,13 +211,24 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         CRM_Core_DAO::executeQuery("ALTER TABLE {$tmp_table_name} ADD INDEX contact_id(contact_id);");
         CRM_Core_DAO::reenableFullGroupByMode();
 
+        // make sure the entries are all there
+        CRM_Core_DAO::executeQuery("
+            INSERT IGNORE INTO civicrm_value_contact_results (entity_id) 
+            SELECT contact_id AS entity_id FROM {$tmp_table_name}");
+
         // ... and return the value update query
         $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);
-        return "
+        $INDIVIDUAL_FIELDS_SQL = '';
+        foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
+            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = new_values.{$column_name}";
+        }
+
+        CRM_Core_DAO::executeQuery("
             UPDATE {$contact_data_table} contact_rating
-            INNER JOIN {$tmp_table_name} new_values ON new_values.contact_id = contact_rating.entity_id
+            INNER JOIN {$tmp_table_name} new_values ON new_values.contact_id = contact_rating.entity_id    
             SET contact_rating.overall_rating = new_values.overall_rating
-        ;";
+                {$INDIVIDUAL_FIELDS_SQL}
+        ;");
     }
 
 
@@ -290,12 +304,12 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      *   if false the query will only be executed once per process
      *
      * @return void
-     *
-     * @deprecated not needed. I think....
      */
-    public static function createMissingActivityCustomData($force = false)
+    public static function createMissingContactCustomData($contact_id_term)
     {
         static $has_been_run = false;
+        CRM_Core_DAO::executeQuery("INSERT IGNORE INTO civicrm_value_contact_results (entity_id) VALUES ({$contact_id_term})");
+
         if ($force || !$has_been_run) {
             $activity_data_table = CRM_Rating_CustomData::getGroupTable(self::ACTIVITY_GROUP);
             $activity_type_id = self::getRatingActivityTypeID();
