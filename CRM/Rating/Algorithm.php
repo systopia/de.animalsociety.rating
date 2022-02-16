@@ -59,4 +59,22 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
         self::log("Updating {$count} contacts took {$runtime} seconds.");
     }
 
+    /**
+     * Update contact's aggregated values based on the linked activities
+     *
+     * @param array|string $contact_ids
+     *   IDs of the contacts to be updated, or 'all'
+     *
+     * @throws Exception
+     *   if something's wrong with the algorithm or the data structures
+     */
+    public static function updateOrganisations($contact_ids = 'all')
+    {
+        $timestamp = microtime(true);
+        $query = CRM_Rating_SqlQueries::runContactAggregationUpdateQuery($contact_ids, 'Organization');
+        $runtime = microtime(true) - $timestamp;
+        $count = $contact_ids == 'all' ? 'all' : count($contact_ids);
+        self::log("Updating {$count} organisations took {$runtime} seconds.");
+        self::log("WARNING: only organisation's own activities considered");
+    }
 }

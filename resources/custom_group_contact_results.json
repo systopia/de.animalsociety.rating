@@ -20,6 +20,7 @@
       "name": "contact_importance",
       "column_name": "contact_importance",
       "label": "Importance of a politican",
+      "option_group_id": "contact_importance",
       "data_type": "String",
       "html_type": "Select",
       "is_required": "0",

@@ -9,7 +9,8 @@
       "_translate": ["label"],
       "name": "published",
       "label": "Published",
-      "filter": "0",
+      "icon": "fa-bullhorn",
+      "filter": "1",
       "is_reserved": "0",
       "is_optgroup": "0",
       "is_active": "1"

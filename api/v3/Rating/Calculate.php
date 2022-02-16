@@ -31,7 +31,7 @@ function _civicrm_api3_rating_calculate_spec(&$spec)
         'api.required' => 1,
         'title' => E::ts('Entity Type'),
         'description' => E::ts(
-            'Type of the entity that the rating should be updated for. Options are activity, contact, organisation'
+            'Type of the entity that the rating should be updated for. Options are activity, individual, organisation'
         ),
     ];
     $spec['entity_ids'] = [
@@ -90,11 +90,13 @@ function civicrm_api3_rating_calculate($params)
             break;
 
         default:
+        case 'individual':
         case 'contact':
             CRM_Rating_Algorithm::updateIndividuals($entity_ids);
             break;
 
         case 'organisation':
+        case 'organization':
             CRM_Rating_Algorithm::updateOrganisations($entity_ids);
             break;
     }
