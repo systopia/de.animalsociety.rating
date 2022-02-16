@@ -1,8 +1,8 @@
 <?php
 /*-------------------------------------------------------+
 | AnimalSociety Rating Extension                         |
-| Copyright (C) 2021 SYSTOPIA                            |
-| Author: A. Bugey (bugey@systopia.de)                   |
+| Copyright (C) 2022 SYSTOPIA                            |
+| Author: B. Endres (endres@systopia.de)                 |
 | http://www.systopia.de/                                |
 +--------------------------------------------------------+
 | This program is released as free software under the    |

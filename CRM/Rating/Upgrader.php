@@ -41,7 +41,7 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base
         $customData->syncOptionGroup(E::path('resources/option_group_contact_importance.json'));
         $customData->syncCustomGroup(E::path('resources/custom_group_political_activity_additional_fields.json'));
         $customData->syncCustomGroup(E::path('resources/custom_group_contact_results.json'));
-        $customData->syncCustomGroup(E::path('resources/custom_group_contact_help_fields.json'));
+//        $customData->syncCustomGroup(E::path('resources/custom_group_contact_help_fields.json'));
     }
 
     /**

@@ -68,60 +68,67 @@ abstract class CRM_Rating_Base
     /**
      * FIELDS of "contact_help_fields" custom group
      */
+//
+//    /** @var string custom field key for the overall rating weighted */
+//    const OVERALL_RATING_WEIGHTED = 'contact_help_fields.overall_rating_weighted';
+//
+//    /** @var string custom field key for the livestock rating weighted */
+//    const LIVESTOCK_RATING_WEIGHTED = 'contact_help_fields.livestock_rating_weighted';
+//
+//    /** @var string custom field key for the aquaculture rating weighted */
+//    const AQUACULTURE_RATING_WEIGHTED = 'contact_help_fields.aquaculture_rating_weighted';
+//
+//    /** @var string custom field key for the animal testing rating weighted */
+//    const ANIMAL_TESTING_RATING_WEIGHTED = 'contact_help_fields.animal_testing_rating_weighted';
+//
+//    /** @var string custom field key for the animal_rights rating weighted */
+//    const ANIMAL_RIGHTS_RATING_WEIGHTED = 'contact_help_fields.animal_rights_rating_weighted';
+//
+//    /** @var string custom field key for the hunting_wildlife rating weighted */
+//    const HUNTING_WILDLIFE_RATING_WEIGHTED = 'contact_help_fields.hunting_wildlife_rating_weighted';
+//
+//    /** @var string custom field key for the pets rating weighted */
+//    const PETS_RATING_WEIGHTED = 'contact_help_fields.pets_rating_weighted';
+//
+//    /** @var string custom field key for the animals_entertainment rating weighted */
+//    const ANIMALS_ENTERTAINMENT_RATING_WEIGHTED = 'contact_help_fields.animals_entertainment_rating_weighted';
+//
+//    /** @var string custom field key for the food_consumer_protection rating weighted */
+//    const FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED = 'contact_help_fields.food_consumer_protection_rating_weighted';
+//
+//    /** @var string custom field key for the sum of all coefficients */
+//    const SUM_COEFFICIENTS = 'contact_help_fields.sum_coefficients';
+//
+//    /** @var string custom field key for the livestock coefficients */
+//    const LIVESTOCK_COEFFICIENTS = 'contact_help_fields.livestock_coefficients';
+//
+//    /** @var string custom field key for the aquaculture coefficients */
+//    const AQUACULTURE_COEFFICIENTS = 'contact_help_fields.aquaculture_coefficients';
+//
+//    /** @var string custom field key for the animal testing coefficients */
+//    const ANIMAL_TESTING_COEFFICIENTS = 'contact_help_fields.animal_testing_coefficients';
+//
+//    /** @var string custom field key for the animal_rights coefficients */
+//    const ANIMAL_RIGHTS_COEFFICIENTS = 'contact_help_fields.animal_rights_coefficients';
+//
+//    /** @var string custom field key for the hunting_wildlife coefficients */
+//    const HUNTING_WILDLIFE_COEFFICIENTS = 'contact_help_fields.hunting_wildlife_coefficients';
+//
+//    /** @var string custom field key for the pets coefficients */
+//    const PETS_COEFFICIENTS = 'contact_help_fields.pets_coefficients';
+//
+//    /** @var string custom field key for the animals_entertainment coefficients */
+//    const ANIMALS_ENTERTAINMENT_COEFFICIENTS = 'contact_help_fields.animals_entertainment_coefficients';
+//
+//    /** @var string custom field key for the food_consumer_protection coefficients */
+//    const FOOD_CONSUMER_PROTECTION_COEFFICIENTS = 'contact_help_fields.food_consumer_protection_coefficients';
 
-    /** @var string custom field key for the overall rating weighted */
-    const OVERALL_RATING_WEIGHTED = 'contact_help_fields.overall_rating_weighted';
 
-    /** @var string custom field key for the livestock rating weighted */
-    const LIVESTOCK_RATING_WEIGHTED = 'contact_help_fields.livestock_rating_weighted';
-
-    /** @var string custom field key for the aquaculture rating weighted */
-    const AQUACULTURE_RATING_WEIGHTED = 'contact_help_fields.aquaculture_rating_weighted';
-
-    /** @var string custom field key for the animal testing rating weighted */
-    const ANIMAL_TESTING_RATING_WEIGHTED = 'contact_help_fields.animal_testing_rating_weighted';
-
-    /** @var string custom field key for the animal_rights rating weighted */
-    const ANIMAL_RIGHTS_RATING_WEIGHTED = 'contact_help_fields.animal_rights_rating_weighted';
-
-    /** @var string custom field key for the hunting_wildlife rating weighted */
-    const HUNTING_WILDLIFE_RATING_WEIGHTED = 'contact_help_fields.hunting_wildlife_rating_weighted';
-
-    /** @var string custom field key for the pets rating weighted */
-    const PETS_RATING_WEIGHTED = 'contact_help_fields.pets_rating_weighted';
-
-    /** @var string custom field key for the animals_entertainment rating weighted */
-    const ANIMALS_ENTERTAINMENT_RATING_WEIGHTED = 'contact_help_fields.animals_entertainment_rating_weighted';
-
-    /** @var string custom field key for the food_consumer_protection rating weighted */
-    const FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED = 'contact_help_fields.food_consumer_protection_rating_weighted';
-
-    /** @var string custom field key for the sum of all coefficients */
-    const SUM_COEFFICIENTS = 'contact_help_fields.sum_coefficients';
-
-    /** @var string custom field key for the livestock coefficients */
-    const LIVESTOCK_COEFFICIENTS = 'contact_help_fields.livestock_coefficients';
-
-    /** @var string custom field key for the aquaculture coefficients */
-    const AQUACULTURE_COEFFICIENTS = 'contact_help_fields.aquaculture_coefficients';
-
-    /** @var string custom field key for the animal testing coefficients */
-    const ANIMAL_TESTING_COEFFICIENTS = 'contact_help_fields.animal_testing_coefficients';
-
-    /** @var string custom field key for the animal_rights coefficients */
-    const ANIMAL_RIGHTS_COEFFICIENTS = 'contact_help_fields.animal_rights_coefficients';
-
-    /** @var string custom field key for the hunting_wildlife coefficients */
-    const HUNTING_WILDLIFE_COEFFICIENTS = 'contact_help_fields.hunting_wildlife_coefficients';
-
-    /** @var string custom field key for the pets coefficients */
-    const PETS_COEFFICIENTS = 'contact_help_fields.pets_coefficients';
-
-    /** @var string custom field key for the animals_entertainment coefficients */
-    const ANIMALS_ENTERTAINMENT_COEFFICIENTS = 'contact_help_fields.animals_entertainment_coefficients';
-
-    /** @var string custom field key for the food_consumer_protection coefficients */
-    const FOOD_CONSUMER_PROTECTION_COEFFICIENTS = 'contact_help_fields.food_consumer_protection_coefficients';
+    /**
+     * MAPPINGS
+     *
+     * @todo configurable?
+     */
 
     /** @var array @var list of activity kind coefficient */
     const ACTIVITY_KIND_MAPPING = [
@@ -166,28 +173,47 @@ abstract class CRM_Rating_Base
         self::PETS_RATING,
         self::ANIMALS_ENTERTAINMENT_RATING,
         self::FOOD_CONSUMER_PROTECTION_RATING,
-        self::OVERALL_RATING_WEIGHTED,
-        self::LIVESTOCK_RATING_WEIGHTED,
-        self::AQUACULTURE_RATING_WEIGHTED,
-        self::ANIMAL_TESTING_RATING_WEIGHTED,
-        self::ANIMAL_RIGHTS_RATING_WEIGHTED,
-        self::HUNTING_WILDLIFE_RATING_WEIGHTED,
-        self::PETS_RATING_WEIGHTED,
-        self::ANIMALS_ENTERTAINMENT_RATING_WEIGHTED,
-        self::FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED,
-        self::SUM_COEFFICIENTS,
-        self::LIVESTOCK_COEFFICIENTS,
-        self::AQUACULTURE_COEFFICIENTS,
-        self::ANIMAL_TESTING_COEFFICIENTS,
-        self::ANIMAL_RIGHTS_COEFFICIENTS,
-        self::HUNTING_WILDLIFE_COEFFICIENTS,
-        self::PETS_COEFFICIENTS,
-        self::ANIMALS_ENTERTAINMENT_COEFFICIENTS,
-        self::FOOD_CONSUMER_PROTECTION_COEFFICIENTS
+//        self::OVERALL_RATING_WEIGHTED,
+//        self::LIVESTOCK_RATING_WEIGHTED,
+//        self::AQUACULTURE_RATING_WEIGHTED,
+//        self::ANIMAL_TESTING_RATING_WEIGHTED,
+//        self::ANIMAL_RIGHTS_RATING_WEIGHTED,
+//        self::HUNTING_WILDLIFE_RATING_WEIGHTED,
+//        self::PETS_RATING_WEIGHTED,
+//        self::ANIMALS_ENTERTAINMENT_RATING_WEIGHTED,
+//        self::FOOD_CONSUMER_PROTECTION_RATING_WEIGHTED,
+//        self::SUM_COEFFICIENTS,
+//        self::LIVESTOCK_COEFFICIENTS,
+//        self::AQUACULTURE_COEFFICIENTS,
+//        self::ANIMAL_TESTING_COEFFICIENTS,
+//        self::ANIMAL_RIGHTS_COEFFICIENTS,
+//        self::HUNTING_WILDLIFE_COEFFICIENTS,
+//        self::PETS_COEFFICIENTS,
+//        self::ANIMALS_ENTERTAINMENT_COEFFICIENTS,
+//        self::FOOD_CONSUMER_PROTECTION_COEFFICIENTS
     ];
 
-    /** @var string custom field key for the activity kind */
+    /**
+     * Maps the column name in the contact field set to the related activity categories
+     */
+    const CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING = [
+        'livestock_rating'                => '1', // livestock
+        'aquaculture_rating'              => '2', // aquaculture
+        'animal_testing_rating'           => '3', // animals_in_research
+        'animal_rights_rating'            => '4', // animal_rights
+        'hunting_wildlife_rating'         => '5', // wildlife
+        'pets_rating'                     => '6', // pets
+        'animals_entertainment_rating'    => '7', // animals_entertainment
+        'food_consumer_protection_rating' => '8', // food_consumer_protection
+    ];
+
+    /** @var string custom group key for the activity fields */
     const ACTIVITY_GROUP = 'political_activity_additional_fields';
+
+    /** @var string custom group key for the contact fields */
+    const CONTACT_GROUP = 'contact_results';
+
+
 
     /** @var string custom field key for the activity kind */
     const ACTIVITY_KIND = 'political_activity_additional_fields.rating_kind';
