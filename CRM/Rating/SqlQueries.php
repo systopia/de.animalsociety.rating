@@ -47,8 +47,8 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
         );
 
-        // make sure there is an entry for all
-        self::createMissingActivityCustomData();
+        // not needed: there needs to be some fields filled already in order to make an impact
+        //self::createMissingActivityCustomData();
 
         // gather some values
         $activity_status_id = (int) CRM_Rating_Algorithm::getRatingActivityStatusPublished();
@@ -176,11 +176,12 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         );
         $CATEGORY_SUMIFS = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $CATEGORY_SUMIFS .= "SUM(IF(category IN({$categories}), {$activity_score_field['column_name']}, 0.0)) AS {$column_name},\n                ";
+            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), {$activity_score_field['column_name']}, 0.0)) AS {$column_name},\n                ";
         }
         $calculation_query = "
             SELECT 
                 contact.id                                                AS contact_id,
+                COUNT(activity.id)                                        AS activity_count,
                 {$CATEGORY_SUMIFS} 
                 SUM(activity_data.{$activity_score_field['column_name']}) AS overall_rating 
             FROM civicrm_contact contact
@@ -202,8 +203,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         // create a temp table with the results, because we'd run into a "Can't update table in stored function/trigger because it is already used by statement which invoked this stored function/trigger"
         CRM_Core_DAO::disableFullGroupByMode();
         $tmp_table = CRM_Utils_SQL_TempTable::build()
-            ->setMemory(true)
-            ->setAutodrop(false)
+            ->setMemory(true) // false for debugging
+            ->setDurable(false) // true for debugging
+            ->setAutodrop(false) // todo: set to true to save memory? needs testing...
             ->createWithQuery($calculation_query);
 
         // add index...
@@ -222,13 +224,12 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
             $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = new_values.{$column_name}";
         }
-
-        CRM_Core_DAO::executeQuery("
+        $update_query = " 
             UPDATE {$contact_data_table} contact_rating
             INNER JOIN {$tmp_table_name} new_values ON new_values.contact_id = contact_rating.entity_id    
             SET contact_rating.overall_rating = new_values.overall_rating
-                {$INDIVIDUAL_FIELDS_SQL}
-        ;");
+                {$INDIVIDUAL_FIELDS_SQL}";
+        CRM_Core_DAO::executeQuery($update_query);
     }
 
 
@@ -294,57 +295,5 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             $qualified_field_name = explode('.', $qualified_field_name);
         }
         return $qualified_field_name[1];
-    }
-
-    /**
-     * This query will create missing entries in the activity custom data,
-     *  so later queries can rely on them being there
-     *
-     * @param boolean $force
-     *   if false the query will only be executed once per process
-     *
-     * @return void
-     */
-    public static function createMissingContactCustomData($contact_id_term)
-    {
-        static $has_been_run = false;
-        CRM_Core_DAO::executeQuery("INSERT IGNORE INTO civicrm_value_contact_results (entity_id) VALUES ({$contact_id_term})");
-
-        if ($force || !$has_been_run) {
-            $activity_data_table = CRM_Rating_CustomData::getGroupTable(self::ACTIVITY_GROUP);
-            $activity_type_id = self::getRatingActivityTypeID();
-
-            // get all missing IDs
-            $missing_id_query = CRM_Core_DAO::executeQuery("
-                SELECT id AS missing_id
-                FROM civicrm_activity
-                WHERE activity_type_id = {$activity_type_id})
-                  AND missing_id NOT IN (SELECT entity_id FROM {$activity_data_table});");
-            $missing_entries = $missing_id_query->fetchAll();
-
-            if ($missing_entries) {
-                // fetch empty values
-                $EMPTY_VALUES = [];
-                $all_columns = CRM_Core_DAO::executeQuery("SHOW COLUMNS FROM {$activity_data_table}");
-                while ($all_columns->fetch()) {
-                    if ($all_columns->Field == 'entity_id') {
-                        $EMPTY_VALUES[] = 'id AS ' . $all_columns->Field;
-                    } else {
-                        $EMPTY_VALUES[] = 'NULL AS ' . $all_columns->Field;
-                    }
-                }
-                $ALL_FIELDS_INIT_VALUES = implode(', ', $EMPTY_VALUES);
-
-                // generate all entries
-                foreach ($missing_entries as $missing_entry) {
-                    CRM_Core_DAO::executeQuery(
-                        "INSERT IGNORE INTO {$activity_data_table} (
-                            SELECT {$ALL_FIELDS_INIT_VALUES}
-                            FROM civicrm_activity 
-                            WHERE activity_type_id = {$activity_type_id});"
-                    );
-                }
-            }
-        }
     }
 }
