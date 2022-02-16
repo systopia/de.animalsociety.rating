@@ -42,21 +42,19 @@ function _civicrm_api3_rating_calculate_spec(&$spec)
             "ID or list of IDs of the entities that the rating should be updated of. Alternatively, you can set pass 'all' to update *all* those entities."
         ),
     ];
-    /** disabled for NOW:
-     * $spec['update_sources'] = [
-     * 'name' => 'update_sources',
-     * 'api.required' => 0,
-     * 'title' => E::ts('Update sources'),
-     * 'description' => E::ts('Update all entities this entity\'s rating depends on'),
-     * ];
-     * $spec['update_dependencies'] = [
-     * 'name' => 'update_dependencies',
-     * 'api.required' => 0,
-     * 'title' => E::ts('Update dependencies'),
-     * 'description' => E::ts('Update all entities this rating might have an influence on'),
-     * ];*/
+    $spec['source_update_level'] = [
+        'name' => 'source_update_level',
+        'api.default' => 0,
+        'title' => E::ts('Update Sources (level)'),
+        'description' => E::ts("First update the data structures needed the given entity, and the recursive level of that (max 2)"),
+    ];
+    $spec['propagation_level'] = [
+        'name' => 'propagation_level',
+        'api.default' => 0,
+        'title' => E::ts('Propagate Updates (level)'),
+        'description' => E::ts("Also update the data structures affected by this change, and the propagation level (max 2)"),
+    ];
 }
-
 
 /**
  * Rating.Calculate API can trigger the re-calculation of the rating value
@@ -75,7 +73,10 @@ function civicrm_api3_rating_calculate($params)
 {
     // extract entity IDs as array of integers:
     // first: make sure it's an array
-    $entity_ids = trim(strtolower($params['entity_ids']));
+    $entity_ids = $params['entity_ids'];
+    if (!is_array($entity_ids)) {
+        $entity_ids = trim(strtolower($params['entity_ids']));
+    }
     if ($entity_ids != 'all') {
         if (!is_array($entity_ids)) {
             $entity_ids = explode(',', $entity_ids);
@@ -84,19 +85,86 @@ function civicrm_api3_rating_calculate($params)
         $entity_ids = array_map('intval', $entity_ids);
     }
 
+    // check if we have to do anything at all
+    if (empty($entity_ids)) {
+        return civicrm_api3_create_success();
+    }
+
+    // prep the source_update und propagation levels
+    $source_update_level = (int) $params['source_update_level'] ?? 0;
+    $propagation_level = (int) $params['propagation_level'] ?? 0;
+
+    // handle the three different types
     switch (strtolower($params['entity_type'])) {
         case 'activity':
+            // run the update
             CRM_Rating_Algorithm::updateActivities($entity_ids);
+
+            // do the propagation
+            if ($propagation_level > 0) {
+                $contact_ids = CRM_Rating_SqlQueries::getContactIdsForActivities($entity_ids);
+                civicrm_api3('Rating', 'calculate', [
+                    'entity_type' => 'individual',
+                    'entity_ids' => $contact_ids,
+                    'source_update_level' => 0,
+                    'propagation_level' => $propagation_level - 1,
+                ]);
+            }
+
+            // we're done (ACTIVITIES)
             break;
 
         default:
         case 'individual':
         case 'contact':
+            // update the sources
+            if ($source_update_level > 0) {
+                $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts($entity_ids);
+                civicrm_api3('Rating', 'calculate', [
+                    'entity_type' => 'activity',
+                    'entity_ids' => $activity_ids,
+                    'source_update_level' => 0,
+                    'propagation_level' => 0,
+                ]);
+            }
+
+            // run the update
             CRM_Rating_Algorithm::updateIndividuals($entity_ids);
+
+            // do the propagation
+            if ($propagation_level > 0) {
+                $organisation_id = CRM_Rating_SqlQueries::getOrganisationIdsForContacts($entity_ids);
+                civicrm_api3('Rating', 'calculate', [
+                    'entity_type' => 'organisation',
+                    'entity_ids' => $organisation_id,
+                    'source_update_level' => 0,
+                    'propagation_level' => 0,
+                ]);
+            }
             break;
+            // we're done (CONTACTS)
 
         case 'organisation':
         case 'organization':
+            // update the sources
+            if ($source_update_level > 0) {
+                $contact_ids = CRM_Rating_SqlQueries::getContactIdsForOrganisations($entity_ids);
+                civicrm_api3('Rating', 'calculate', [
+                    'entity_type' => 'individual',
+                    'entity_ids' => $contact_ids,
+                    'source_update_level' => $source_update_level - 1,
+                    'propagation_level' => 0,
+                ]);
+                $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts($entity_ids);
+                civicrm_api3('Rating', 'calculate', [
+                    'entity_type' => 'activity',
+                    'entity_ids' => $activity_ids,
+                    'source_update_level' => 0,
+                    'propagation_level' => 0,
+                ]);
+            }
+
+            // run the organisation update
             CRM_Rating_Algorithm::updateOrganisations($entity_ids);
             break;
     }

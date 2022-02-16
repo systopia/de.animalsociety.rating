@@ -234,10 +234,103 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
 
 
 
+    /***************************************************
+     ***             RELATIONSHIP QUERIES            ***
+     ***************************************************/
 
+    /**
+     * Fetch the contacts used by this activities
+     *
+     * @param array|string $activity_ids
+     *   'all' or list of IDs
+     *
+     * @return string|array
+     *   'all' or list of IDs
+     */
+    public static function getContactIdsForActivities($activity_ids)
+    {
+        if ($activity_ids == 'all') return 'all';
+        $contact_ids = [];
+        $activity_ids = implode(',', array_map('intval', $activity_ids));
+        if (!empty($activity_ids)) {
+            $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
+            $query = "
+                SELECT DISTINCT(ac.contact_id) AS contact_id
+                FROM civicrm_activity activity
+                LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = activity.id
+                WHERE ac.activity_id IN ({$activity_ids})
+                  AND ac.record_type_id = 3
+                  AND activity.activity_type_id = {$activity_type_id}";
+            $result = CRM_Core_DAO::executeQuery($query)->fetchAll();
+            foreach ($result as $result_entry) {
+                $contact_ids[] = $result_entry['contact_id'];
+            }
+        }
+        return $contact_ids;
+    }
 
+    /**
+     * Fetch the activity IDs used by this contacts
+     *
+     * @param array|string $contact_ids
+     *   'all' or list of IDs
+     *
+     * @return string|array
+     *   'all' or list of IDs
+     */
+    public static function getActivityIdsForContacts($contact_ids)
+    {
+        if ($contact_ids == 'all') return 'all';
+        $activity_ids = [];
+        $contact_ids = implode(',', array_map('intval', $contact_ids));
+        if (!empty($activity_ids)) {
+            $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
+            $query = "
+                SELECT DISTINCT(ac.activity_id) AS activity_id
+                FROM civicrm_activity activity
+                LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = activity.id
+                WHERE ac.contact_id IN ({$contact_ids})
+                  AND ac.record_type_id = 3
+                  AND activity.activity_type_id = {$activity_type_id}";
+            $result = CRM_Core_DAO::executeQuery($query)->fetchAll();
+            foreach ($result as $result_entry) {
+                $activity_ids[] = $result_entry['activity_id'];
+            }
+        }
+        return $activity_ids;
+    }
 
+    /**
+     * Fetch the organisation contact IDs for the given individual contact ids
+     *
+     * @param array|string $contact_ids
+     *   'all' or list of IDs
+     *
+     * @return string|array
+     *   'all' or list of IDs
+     */
+    public static function getOrganisationIdsForContacts($contact_ids)
+    {
+        if ($contact_ids == 'all') return 'all';
+        Civi::log()->warning("getOrganisationIdsForContacts not implemented");
+        return [];
+    }
 
+    /**
+     * Fetch the individual contact IDs for the given organsation contact ids
+     *
+     * @param array|string $contact_ids
+     *   'all' or list of IDs
+     *
+     * @return string|array
+     *   'all' or list of IDs
+     */
+    public static function getContactIdsForOrganisations($contact_ids)
+    {
+        if ($contact_ids == 'all') return 'all';
+        Civi::log()->warning("getContactIdsForOrganisations not implemented");
+        return [];
+    }
 
 
 
