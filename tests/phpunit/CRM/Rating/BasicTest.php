@@ -15,7 +15,6 @@
 +--------------------------------------------------------*/
 
 use Civi\Test\Api3TestTrait;
-
 use CRM_Rating_ExtensionUtil as E;
 
 /**
@@ -56,7 +55,7 @@ class CRM_Rating_BasicTest extends CRM_Rating_TestBase
         $this->assertNotEmpty($activity, "Political Activity not created");
 
         // recalculate
-        $this->refresh($contact['id'], 'Contact', 1);
+        $this->refreshRating($contact['id'], 'Contact', 1);
 
         // verify that the rating has been propagated
         $contact_rating = $this->getOverallContactRating($contact['id']);

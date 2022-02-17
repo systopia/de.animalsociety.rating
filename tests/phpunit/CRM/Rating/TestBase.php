@@ -26,8 +26,8 @@ use CRM_Rating_ExtensionUtil as E;
  *
  * @group headless
  */
-abstract class CRM_Rating_TestBase implements HeadlessInterface, HookInterface,
-                                                                            TransactionalInterface
+abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface
+
 {
     use Api3TestTrait {
         callAPISuccess as protected traitCallAPISuccess;
@@ -126,8 +126,9 @@ abstract class CRM_Rating_TestBase implements HeadlessInterface, HookInterface,
         $attributes['activity_type_id'] = CRM_Rating_Base::getRatingActivityTypeID();
         $attributes['subject'] = $this->randomString();
         $attributes['target_id'] = $contact_id;
+        $attributes['source_contact_id'] = $contact_id;
         $attributes['activity_status_id'] = CRM_Rating_Base::getRatingActivityStatusPublished();
-        $attributes['activity_date_time'] = date('YmdHis', strtotime($attributes['activity_date_time']));
+        $attributes['activity_date_time'] = date('YmdHis', strtotime($attributes['activity_date_time'] ?? 'now'));
 
         // fill missing attributes
         if (empty($attributes[CRM_Rating_Base::ACTIVITY_TITLE])) {
@@ -142,8 +143,18 @@ abstract class CRM_Rating_TestBase implements HeadlessInterface, HookInterface,
         if (empty($attributes[CRM_Rating_Base::ACTIVITY_SCORE])) {
             $attributes[CRM_Rating_Base::ACTIVITY_SCORE] = $this->getRandomOptionValue('activity_score');
         }
+        if (empty($attributes[CRM_Rating_Base::ACTIVITY_WEIGHT])) {
+            $attributes[CRM_Rating_Base::ACTIVITY_WEIGHT] = $this->getRandomOptionValue('activity_weight');
+        }
 
         $result = $this->traitCallAPISuccess('Activity', 'create', $attributes);
+        $activity_id = $result['id'];
+
+        // make sure it's connected to the contact
+        $result2 = $this->traitCallAPISuccess('ActivityContact', 'get', ['activity_id' => $activity_id]);
+        $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts([$contact_id]);
+        $this->assertContains($activity_id, $activity_ids, "Oops");
+
         return $result;
     }
 
@@ -196,7 +207,7 @@ abstract class CRM_Rating_TestBase implements HeadlessInterface, HookInterface,
         $field_id = 'custom_' . $field['id'];
         $result = $this->traitCallAPISuccess('Contact', 'getvalue', [
             'id' => $contact_id,
-            'return' => 'custom_' . $field_id
+            'return' => $field_id
         ]);
         return (float) $result;
     }
@@ -213,5 +224,35 @@ abstract class CRM_Rating_TestBase implements HeadlessInterface, HookInterface,
     public function getOverallContactRating($contact_id)
     {
         return $this->getRating($contact_id, CRM_Rating_Base::OVERALL_RATING);
+    }
+
+    /**
+     * Update/recalculate the rating values for the given entities
+     *
+     * @param array|null $entity_ids
+     *    list of entity IDs to update. if null, update 'all'
+     *
+     * @param string $entity_type
+     *    one of activity, individual, organisation
+     *
+     * @param integer $source_update_level
+     *    should the sources be updated too? how deep: (0/1/2) levels
+     *
+     * @param $propagates_update_level
+     *    should the dependent entities be updated too? how deep: (0/1/2) levels
+     *
+     * @return void
+     */
+    public function refreshRating($entity_ids, $entity_type = 'Contact', $source_update_level = 0, $propagation_level = 0)
+    {
+        if (!is_array($entity_ids)) {
+            $entity_ids = [$entity_ids];
+        }
+        $result = $this->traitCallAPISuccess('Rating', 'Calculate', [
+            'entity_type' => strtolower($entity_type),
+            'entity_ids' => $entity_ids,
+            'source_update_level' => $source_update_level,
+            'propagation_level' => $propagation_level,
+        ]);
     }
 }
