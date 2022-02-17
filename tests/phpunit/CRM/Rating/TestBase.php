@@ -118,9 +118,11 @@ abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implement
      * @param array $attributes
      *   list of attributes for the activity, to overwrite the generated values. These are:
      *      rating_title, rating_kind, rating_category, activity_score, activity_type_id, activity_status_id
-     * @return void
+     *
+     * @return array
+     *   activity data
      */
-    public function createPoliticalActivity($contact_id, $attributes = [])
+    public function createPoliticalActivity(int  $contact_id, array $attributes = []) : array
     {
         // set mandatory attributes
         $attributes['activity_type_id'] = CRM_Rating_Base::getRatingActivityTypeID();
@@ -147,15 +149,15 @@ abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implement
             $attributes[CRM_Rating_Base::ACTIVITY_WEIGHT] = $this->getRandomOptionValue('activity_weight');
         }
 
+        CRM_Rating_CustomData::resolveCustomFields($attributes);
         $result = $this->traitCallAPISuccess('Activity', 'create', $attributes);
         $activity_id = $result['id'];
 
         // make sure it's connected to the contact
-        $result2 = $this->traitCallAPISuccess('ActivityContact', 'get', ['activity_id' => $activity_id]);
         $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts([$contact_id]);
-        $this->assertContains($activity_id, $activity_ids, "Oops");
+        $this->assertContains($activity_id, $activity_ids, "Activity should be connected to the contact");
 
-        return $result;
+        return (array) $this->traitCallAPISuccess('Activity', 'getsingle', ['id' => $activity_id]);
     }
 
     /**
