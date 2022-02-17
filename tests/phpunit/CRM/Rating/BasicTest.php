@@ -16,11 +16,10 @@
 
 use Civi\Test\Api3TestTrait;
 
-
 use CRM_Rating_ExtensionUtil as E;
 
 /**
- * Tests regarding the double opt in workflow
+ * First simple tests about the rating algorithms
  *
  * @group headless
  */
@@ -48,7 +47,7 @@ class CRM_Rating_BasicTest extends CRM_Rating_TestBase
         // create a contact
         $contact = $this->createContact();
         $this->assertNotEmpty($contact, "Contact not created");
-        $contact_rating = $this->getTotalContactRating($contact['id']);
+        $contact_rating = $this->getOverallContactRating($contact['id']);
         $this->assertEmpty($contact_rating, "Contact rating should be zero/empty");
 
 
@@ -60,7 +59,7 @@ class CRM_Rating_BasicTest extends CRM_Rating_TestBase
         $this->refresh($contact['id'], 'Contact', 1);
 
         // verify that the rating has been propagated
-        $contact_rating = $this->getTotalContactRating($contact['id']);
+        $contact_rating = $this->getOverallContactRating($contact['id']);
         $this->assertNotEmpty($contact_rating, "Contact rating should not be zero/empty any more");
     }
 }

@@ -218,6 +218,12 @@ abstract class CRM_Rating_Base
     /** @var string custom field key for the activity kind */
     const ACTIVITY_KIND = 'political_activity_additional_fields.rating_kind';
 
+    /** @var string custom field key for the activity kind */
+    const ACTIVITY_CATEGORY = 'political_activity_additional_fields.rating_category';
+
+    /** @var string custom field key for the activity title */
+    const ACTIVITY_TITLE = 'political_activity_additional_fields.rating_title';
+
     /** @var string custom field key for the score of the single activity */
     const ACTIVITY_SCORE = 'political_activity_additional_fields.rating_score';
 
@@ -229,6 +235,7 @@ abstract class CRM_Rating_Base
 
     /** @var array the list of fields that are relevant for the calculations */
     const RELEVANT_ACTIVITY_FIELDS = [
+        self::ACTIVITY_TITLE,
         self::ACTIVITY_KIND,
         self::ACTIVITY_SCORE,
         self::ACTIVITY_WEIGHT,

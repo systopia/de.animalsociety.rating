@@ -7,7 +7,9 @@ eval(cv('php:boot --level=classloader', 'phpcode'));
 
 // Allow autoloading of PHPUnit helper classes in this extension.
 $loader = new \Composer\Autoload\ClassLoader();
-$loader->add('CRM_', [__DIR__, __DIR__ . '/../../../de.animalsociety.rating/tests/phpunit']);
+$loader->add('CRM', __DIR__);
+//$loader->add('CRM_', [__DIR__, __DIR__ . '/../../../de.animalsociety.rating/tests/phpunit']);
+$loader->add('CRM_', [__DIR__, __DIR__ . '/../../../de.animalsociety.rating/tests/phpunit/CRM']);
 $loader->add('Civi\\', __DIR__);
 $loader->add('api_', __DIR__);
 $loader->add('api\\', __DIR__);
