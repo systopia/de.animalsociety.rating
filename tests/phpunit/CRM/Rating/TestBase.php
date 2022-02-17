@@ -231,7 +231,7 @@ abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implement
     /**
      * Update/recalculate the rating values for the given entities
      *
-     * @param array|null $entity_ids
+     * @param array|null|string $entity_ids
      *    list of entity IDs to update. if null, update 'all'
      *
      * @param string $entity_type
@@ -247,8 +247,10 @@ abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implement
      */
     public function refreshRating($entity_ids, $entity_type = 'Contact', $source_update_level = 0, $propagation_level = 0)
     {
-        if (!is_array($entity_ids)) {
-            $entity_ids = [$entity_ids];
+        if ($entity_ids != 'all') {
+            if (!is_array($entity_ids)) {
+                $entity_ids = [$entity_ids];
+            }
         }
         $result = $this->traitCallAPISuccess('Rating', 'Calculate', [
             'entity_type' => strtolower($entity_type),
