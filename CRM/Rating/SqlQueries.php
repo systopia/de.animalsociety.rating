@@ -67,17 +67,17 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
 
         // create a temp table with the results, because we'd run into a "Can't update table in stored function/trigger because it is already used by statement which invoked this stored function/trigger"
         CRM_Core_DAO::disableFullGroupByMode();
-        $tmp_table = CRM_Utils_SQL_TempTable::build()
-            ->setMemory(true)
-            ->setAutodrop(false)
-            ->createWithQuery("
+        $new_values_query = "
             SELECT activity.id AS activity_id, {$rating_calculation_expression} AS rating
             FROM {$activity_data_table} activity_rating
             LEFT JOIN civicrm_activity activity ON activity_rating.entity_id = activity.id
             WHERE activity_rating.entity_id {$activity_id_selector}
               AND activity.status_id = {$activity_status_id}
-              AND activity.activity_type_id = {$activity_type_id}
-              ");
+              AND activity.activity_type_id = {$activity_type_id}";
+        $tmp_table = CRM_Utils_SQL_TempTable::build()
+            ->setMemory(true)
+            ->setAutodrop(false)
+            ->createWithQuery($new_values_query);
         CRM_Core_DAO::reenableFullGroupByMode();
 
         // add index...
@@ -179,18 +179,18 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), {$activity_score_field['column_name']}, 0.0)) AS {$column_name},\n                ";
         }
         $calculation_query = "
-            SELECT 
+            SELECT
                 contact.id                                                AS contact_id,
                 COUNT(activity.id)                                        AS activity_count,
-                {$CATEGORY_SUMIFS} 
-                SUM(activity_data.{$activity_score_field['column_name']}) AS overall_rating 
+                {$CATEGORY_SUMIFS}
+                SUM(activity_data.{$activity_score_field['column_name']}) AS overall_rating
             FROM civicrm_contact contact
-            LEFT JOIN civicrm_activity_contact activity_link 
+            LEFT JOIN civicrm_activity_contact activity_link
                    ON activity_link.contact_id = contact.id
                    AND record_type_id = 3
-            LEFT JOIN civicrm_activity activity 
+            LEFT JOIN civicrm_activity activity
                    ON activity_link.activity_id = activity.id
-            LEFT JOIN {$activity_data_table} activity_data 
+            LEFT JOIN {$activity_data_table} activity_data
                    ON activity_data.entity_id = activity.id
             WHERE {$contact_id_selector}
               AND activity.activity_type_id = {$activity_type_id}
@@ -215,7 +215,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
 
         // make sure the entries are all there
         CRM_Core_DAO::executeQuery("
-            INSERT IGNORE INTO civicrm_value_contact_results (entity_id) 
+            INSERT IGNORE INTO civicrm_value_contact_results (entity_id)
             SELECT contact_id AS entity_id FROM {$tmp_table_name}");
 
         // ... and return the value update query
@@ -224,9 +224,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
             $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = new_values.{$column_name}";
         }
-        $update_query = " 
+        $update_query = "
             UPDATE {$contact_data_table} contact_rating
-            INNER JOIN {$tmp_table_name} new_values ON new_values.contact_id = contact_rating.entity_id    
+            INNER JOIN {$tmp_table_name} new_values ON new_values.contact_id = contact_rating.entity_id
             SET contact_rating.overall_rating = new_values.overall_rating
                 {$INDIVIDUAL_FIELDS_SQL}";
         CRM_Core_DAO::executeQuery($update_query);
@@ -283,7 +283,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         if ($contact_ids == 'all') return 'all';
         $activity_ids = [];
         $contact_ids = implode(',', array_map('intval', $contact_ids));
-        if (!empty($activity_ids)) {
+        if (!empty($contact_ids)) {
             $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
             $query = "
                 SELECT DISTINCT(ac.activity_id) AS activity_id

@@ -120,12 +120,14 @@ function civicrm_api3_rating_calculate($params)
             // update the sources
             if ($source_update_level > 0) {
                 $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts($entity_ids);
-                civicrm_api3('Rating', 'calculate', [
-                    'entity_type' => 'activity',
-                    'entity_ids' => $activity_ids,
-                    'source_update_level' => 0,
-                    'propagation_level' => 0,
-                ]);
+                if (!empty($activity_ids)) {
+                    civicrm_api3('Rating', 'calculate', [
+                        'entity_type' => 'activity',
+                        'entity_ids' => $activity_ids,
+                        'source_update_level' => 0,
+                        'propagation_level' => 0,
+                    ]);
+                }
             }
 
             // run the update
@@ -134,12 +136,14 @@ function civicrm_api3_rating_calculate($params)
             // do the propagation
             if ($propagation_level > 0) {
                 $organisation_id = CRM_Rating_SqlQueries::getOrganisationIdsForContacts($entity_ids);
-                civicrm_api3('Rating', 'calculate', [
-                    'entity_type' => 'organisation',
-                    'entity_ids' => $organisation_id,
-                    'source_update_level' => 0,
-                    'propagation_level' => 0,
-                ]);
+                if (!empty($organisation_id)) {
+                    civicrm_api3('Rating', 'calculate', [
+                        'entity_type' => 'organisation',
+                        'entity_ids' => $organisation_id,
+                        'source_update_level' => 0,
+                        'propagation_level' => 0,
+                    ]);
+                }
             }
             break;
             // we're done (CONTACTS)
@@ -149,19 +153,23 @@ function civicrm_api3_rating_calculate($params)
             // update the sources
             if ($source_update_level > 0) {
                 $contact_ids = CRM_Rating_SqlQueries::getContactIdsForOrganisations($entity_ids);
-                civicrm_api3('Rating', 'calculate', [
-                    'entity_type' => 'individual',
-                    'entity_ids' => $contact_ids,
-                    'source_update_level' => $source_update_level - 1,
-                    'propagation_level' => 0,
-                ]);
+                if (!empty($contact_ids)) {
+                    civicrm_api3('Rating', 'calculate', [
+                        'entity_type' => 'individual',
+                        'entity_ids' => $contact_ids,
+                        'source_update_level' => $source_update_level - 1,
+                        'propagation_level' => 0,
+                    ]);
+                }
                 $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts($entity_ids);
-                civicrm_api3('Rating', 'calculate', [
-                    'entity_type' => 'activity',
-                    'entity_ids' => $activity_ids,
-                    'source_update_level' => 0,
-                    'propagation_level' => 0,
-                ]);
+                if (!empty($activity_ids)) {
+                    civicrm_api3('Rating', 'calculate', [
+                        'entity_type' => 'activity',
+                        'entity_ids' => $activity_ids,
+                        'source_update_level' => 0,
+                        'propagation_level' => 0,
+                    ]);
+                }
             }
 
             // run the organisation update
