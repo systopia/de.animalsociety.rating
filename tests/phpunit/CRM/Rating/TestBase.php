@@ -157,7 +157,9 @@ abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implement
         $activity_ids = CRM_Rating_SqlQueries::getActivityIdsForContacts([$contact_id]);
         $this->assertContains($activity_id, $activity_ids, "Activity should be connected to the contact");
 
-        return (array) $this->traitCallAPISuccess('Activity', 'getsingle', ['id' => $activity_id]);
+        $activity = $this->traitCallAPISuccess('Activity', 'getsingle', ['id' => $activity_id]);
+        CRM_Rating_CustomData::labelCustomFields($activity);
+        return $activity;
     }
 
     /**
