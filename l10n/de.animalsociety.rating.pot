@@ -1,0 +1,640 @@
+# Copyright CiviCRM LLC (c) 2004-2015
+# This file is distributed under the same license as the CiviCRM package.
+# If you contribute heavily to a translation and deem your work copyrightable,
+# make sure you license it to CiviCRM LLC under Academic Free License 3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: de.animalsociety.rating\n"
+"POT-Creation-Date: 2022-04-09 21:16+0200\n"
+"Language-Team: CiviCRM Translators <civicrm-translators@lists.civicrm.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: CRM/Rating/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid "Entity Type"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid ""
+"Type of the entity that the rating should be updated for. Options are "
+"activity, individual, organisation"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid "Entity IDs"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid ""
+"ID or list of IDs of the entities that the rating should be updated of. "
+"Alternatively, you can set pass 'all' to update *all* those entities."
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid "Update Sources (level)"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid ""
+"First update the data structures needed the given entity, and the recursive "
+"level of that (max 2)"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid "Propagate Updates (level)"
+msgstr ""
+
+#: api/v3/Rating/Calculate.php
+msgid ""
+"Also update the data structures affected by this change, and the propagation "
+"level (max 2)"
+msgstr ""
+
+#: l10n.php
+msgid "Overall rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Livestock rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Aquaculture rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Animal testing rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Animal rights rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Hunting & wildlife rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Pets rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Animals in entertainment rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Food & consumer protection rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Sum of coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Livestock coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Aquaculture coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Animal testing coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Animal rights coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Hunting & wildlife coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Pets coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Animals in entertainment coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Food & consumer protection coefficients"
+msgstr ""
+
+#: l10n.php
+msgid "Importance of a politican"
+msgstr ""
+
+#: l10n.php
+msgid "Overall rating"
+msgstr ""
+
+#: l10n.php
+msgid "Livestock rating"
+msgstr ""
+
+#: l10n.php
+msgid "Aquaculture rating"
+msgstr ""
+
+#: l10n.php
+msgid "Animal testing rating"
+msgstr ""
+
+#: l10n.php
+msgid "Animal rights rating"
+msgstr ""
+
+#: l10n.php
+msgid "Hunting & wildlife rating"
+msgstr ""
+
+#: l10n.php
+msgid "Pets rating"
+msgstr ""
+
+#: l10n.php
+msgid "Animals in entertainment rating"
+msgstr ""
+
+#: l10n.php
+msgid "Food & consumer protection rating"
+msgstr ""
+
+#: l10n.php
+msgid "Title"
+msgstr ""
+
+#: l10n.php
+msgid "Kind"
+msgstr ""
+
+#: l10n.php
+msgid "Parliament"
+msgstr ""
+
+#: l10n.php
+msgid "Vote"
+msgstr ""
+
+#: l10n.php
+msgid "category"
+msgstr ""
+
+#: l10n.php
+msgid "Subcategory"
+msgstr ""
+
+#: l10n.php
+msgid "Species"
+msgstr ""
+
+#: l10n.php
+msgid "Score"
+msgstr ""
+
+#: l10n.php
+msgid "Comment on Rating"
+msgstr ""
+
+#: l10n.php
+msgid "Weight"
+msgstr ""
+
+#: l10n.php
+msgid "Source - Tierpolitik.org"
+msgstr ""
+
+#: l10n.php
+msgid "Expectations of citizens"
+msgstr ""
+
+#: l10n.php
+msgid "CTA - Tweet"
+msgstr ""
+
+#: l10n.php
+msgid "CTA - Email - Subject"
+msgstr ""
+
+#: l10n.php
+msgid "CTA - Email - Text"
+msgstr ""
+
+#: l10n.php
+msgid "Rating weighted"
+msgstr ""
+
+#: l10n.php
+msgid "Livestock"
+msgstr ""
+
+#: l10n.php
+msgid "Animals in aquaculture & fisheries"
+msgstr ""
+
+#: l10n.php
+msgid "Animals in research"
+msgstr ""
+
+#: l10n.php
+msgid "Animal rights"
+msgstr ""
+
+#: l10n.php
+msgid "Wildlife"
+msgstr ""
+
+#: l10n.php
+msgid "Pets"
+msgstr ""
+
+#: l10n.php
+msgid "Animals in entertainment"
+msgstr ""
+
+#: l10n.php
+msgid "Food & consumer protection"
+msgstr ""
+
+#: l10n.php
+msgid "Public communication"
+msgstr ""
+
+#: l10n.php
+msgid "Speech"
+msgstr ""
+
+#: l10n.php
+msgid "Program item"
+msgstr ""
+
+#: l10n.php
+msgid "Extra-parliamentary work"
+msgstr ""
+
+#: l10n.php
+msgid "Parliamentary question"
+msgstr ""
+
+#: l10n.php
+msgid "Participation draft law"
+msgstr ""
+
+#: l10n.php
+msgid "Vote on subsidies"
+msgstr ""
+
+#: l10n.php
+msgid "Vote on public contract"
+msgstr ""
+
+#: l10n.php
+msgid "Vote on draft law"
+msgstr ""
+
+#: l10n.php
+msgid "good"
+msgstr ""
+
+#: l10n.php
+msgid "rather good"
+msgstr ""
+
+#: l10n.php
+msgid "rather bad"
+msgstr ""
+
+#: l10n.php
+msgid "bad"
+msgstr ""
+
+#: l10n.php
+msgid "Badgers"
+msgstr ""
+
+#: l10n.php
+msgid "Cattle"
+msgstr ""
+
+#: l10n.php
+msgid "Ducks"
+msgstr ""
+
+#: l10n.php
+msgid "Whales"
+msgstr ""
+
+#: l10n.php
+msgid "Cats"
+msgstr ""
+
+#: l10n.php
+msgid "Horses"
+msgstr ""
+
+#: l10n.php
+msgid "Dogs"
+msgstr ""
+
+#: l10n.php
+msgid "Pigs"
+msgstr ""
+
+#: l10n.php
+msgid "Corvidae"
+msgstr ""
+
+#: l10n.php
+msgid "Crustaceans"
+msgstr ""
+
+#: l10n.php
+msgid "Elephants"
+msgstr ""
+
+#: l10n.php
+msgid "Rabbits"
+msgstr ""
+
+#: l10n.php
+msgid "Wolves"
+msgstr ""
+
+#: l10n.php
+msgid "Sheep"
+msgstr ""
+
+#: l10n.php
+msgid "Geese"
+msgstr ""
+
+#: l10n.php
+msgid "Birds"
+msgstr ""
+
+#: l10n.php
+msgid "Bears"
+msgstr ""
+
+#: l10n.php
+msgid "Seals"
+msgstr ""
+
+#: l10n.php
+msgid "Pigeons"
+msgstr ""
+
+#: l10n.php
+msgid "Fishes"
+msgstr ""
+
+#: l10n.php
+msgid "Chicken"
+msgstr ""
+
+#: l10n.php
+msgid "Squids"
+msgstr ""
+
+#: l10n.php
+msgid "Primates"
+msgstr ""
+
+#: l10n.php
+msgid "Rats"
+msgstr ""
+
+#: l10n.php
+msgid "Foxes"
+msgstr ""
+
+#: l10n.php
+msgid "Sharks"
+msgstr ""
+
+#: l10n.php
+msgid "Marine mammals"
+msgstr ""
+
+#: l10n.php
+msgid "Published"
+msgstr ""
+
+#: l10n.php
+msgid "Animal abandonment"
+msgstr ""
+
+#: l10n.php
+msgid "Slaughter"
+msgstr ""
+
+#: l10n.php
+msgid "Slaughter of pregnant animals"
+msgstr ""
+
+#: l10n.php
+msgid "War animals"
+msgstr ""
+
+#: l10n.php
+msgid "Chicks killing"
+msgstr ""
+
+#: l10n.php
+msgid "Cage keeping"
+msgstr ""
+
+#: l10n.php
+msgid "Cameras in slaughterhouses"
+msgstr ""
+
+#: l10n.php
+msgid "Hunting"
+msgstr ""
+
+#: l10n.php
+msgid "Circus"
+msgstr ""
+
+#: l10n.php
+msgid "Dolphinarium"
+msgstr ""
+
+#: l10n.php
+msgid "Vermins"
+msgstr ""
+
+#: l10n.php
+msgid "Electrical Stunning"
+msgstr ""
+
+#: l10n.php
+msgid "Factory Farming"
+msgstr ""
+
+#: l10n.php
+msgid "Labelling"
+msgstr ""
+
+#: l10n.php
+msgid "CO2 Stunning"
+msgstr ""
+
+#: l10n.php
+msgid "Fur"
+msgstr ""
+
+#: l10n.php
+msgid "Force Feeding"
+msgstr ""
+
+#: l10n.php
+msgid "City Animals"
+msgstr ""
+
+#: l10n.php
+msgid "Veggie Menus"
+msgstr ""
+
+#: l10n.php
+msgid "Mutilation"
+msgstr ""
+
+#: l10n.php
+msgid "Sport fishing"
+msgstr ""
+
+#: l10n.php
+msgid "Live plucking"
+msgstr ""
+
+#: l10n.php
+msgid "Protection of whistleblowers"
+msgstr ""
+
+#: l10n.php
+msgid "Education"
+msgstr ""
+
+#: l10n.php
+msgid "Reproduction control"
+msgstr ""
+
+#: l10n.php
+msgid "Pet trade"
+msgstr ""
+
+#: l10n.php
+msgid "Wildlife trade"
+msgstr ""
+
+#: l10n.php
+msgid "Transport"
+msgstr ""
+
+#: l10n.php
+msgid "Zoo"
+msgstr ""
+
+#: l10n.php
+msgid "Leather"
+msgstr ""
+
+#: l10n.php
+msgid "Live animal transport"
+msgstr ""
+
+#: l10n.php
+msgid "Reduction of the animal population"
+msgstr ""
+
+#: l10n.php
+msgid "New buildings"
+msgstr ""
+
+#: l10n.php
+msgid "Emergency killings"
+msgstr ""
+
+#: l10n.php
+msgid "Torture breeding"
+msgstr ""
+
+#: l10n.php
+msgid "Control and enforcement"
+msgstr ""
+
+#: l10n.php
+msgid "Medication use"
+msgstr ""
+
+#: l10n.php
+msgid "Right of association"
+msgstr ""
+
+#: l10n.php
+msgid "Animal welfare officer"
+msgstr ""
+
+#: l10n.php
+msgid "Wildlife and road traffic"
+msgstr ""
+
+#: l10n.php
+msgid "Animal shelters"
+msgstr ""
+
+#: l10n.php
+msgid "Political Activity"
+msgstr ""
+
+#: l10n.php
+msgid "Yes"
+msgstr ""
+
+#: l10n.php
+msgid "No"
+msgstr ""
+
+#: l10n.php
+msgid "Abstention"
+msgstr ""
+
+#: l10n.php
+msgid "absent"
+msgstr ""
+
+#: l10n.php
+msgid "1"
+msgstr ""
+
+#: l10n.php
+msgid "1.5"
+msgstr ""
+
+#: l10n.php
+msgid "2"
+msgstr ""
+
+#: l10n.php
+msgid "2.5"
+msgstr ""
+
+#: l10n.php
+msgid "3"
+msgstr ""
+
+#: l10n.php
+msgid "normal"
+msgstr ""
+
+#: l10n.php
+msgid "well-known"
+msgstr ""
