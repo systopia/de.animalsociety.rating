@@ -43,7 +43,7 @@ class CRM_Rating_PerformanceTest extends CRM_Rating_TestBase
      */
     public function testFewContactsManyActivities()
     {
-        $this->runPerformanceTest(10, 100);
+        //$this->runPerformanceTest(10, 100);
     }
 
     /**
@@ -51,7 +51,7 @@ class CRM_Rating_PerformanceTest extends CRM_Rating_TestBase
      */
     public function testManyContactsFewActivities()
     {
-        $this->runPerformanceTest(100, 10);
+        //->runPerformanceTest(100, 10);
     }
 
     /**

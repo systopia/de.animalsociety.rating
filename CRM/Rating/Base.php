@@ -145,11 +145,11 @@ abstract class CRM_Rating_Base
 
     /** @var array Mapping for weight coefficient */
     const ACTIVITY_WEIGHT_MAPPING = [
-        10 => 1,
+        10 => 1.0,
         15 => 1.5,
-        20 => 2,
+        20 => 2.0,
         25 => 2.5,
-        30 => 3
+        30 => 3.0
     ];
 
     /** @var array Mapping of score  */

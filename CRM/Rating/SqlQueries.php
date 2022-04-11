@@ -142,13 +142,10 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      ***********************************************/
 
     /**
-     * Generate a SQL query to recalculate score of the given activity
+     * Run a SQL query to recalculate score of the given contacts
      *
      * @param array|string $contact_ids
      *   activity IDs to update
-     *
-     * @return string
-     *   generated query
      *
      * @throws Exception
      *   if something's wrong with the expected data structure
@@ -174,16 +171,29 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::ACTIVITY_GROUP,
             self::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
         );
+        $activity_weight_field = CRM_Rating_CustomData::getCustomField(
+            self::ACTIVITY_GROUP,
+            self::getFieldName(self::ACTIVITY_WEIGHT)
+        );
+        $weight_coefficient = self::createSqlMappingExpression(
+            self::ACTIVITY_GROUP,
+            self::ACTIVITY_WEIGHT_MAPPING
+        );
+
+        // remark: adding 0.00000001 weight to avoid divide by zero
         $CATEGORY_SUMIFS = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), {$activity_score_field['column_name']}, 0.0)) AS {$column_name},\n                ";
+            // todo: use mapping instead of '/ 10.0'
+            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), {$activity_score_field['column_name']}, 0.0)) / (SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_weight_field['column_name']}, 0.0) / 10.0) + 0.00000001) AS {$column_name},\n";
         }
+        // todo: use mapping instead of '/ 10.0'
         $calculation_query = "
             SELECT
                 contact.id                                                AS contact_id,
                 COUNT(activity.id)                                        AS activity_count,
+                {$weight_coefficient}                                     AS weight_factor,
                 {$CATEGORY_SUMIFS}
-                SUM(activity_data.{$activity_score_field['column_name']}) AS overall_rating
+                SUM(activity_data.{$activity_score_field['column_name']}) / (SUM(activity_data.{$activity_weight_field['column_name']} / 10.0) + 0.00000001) AS overall_rating
             FROM civicrm_contact contact
             LEFT JOIN civicrm_activity_contact activity_link
                    ON activity_link.contact_id = contact.id
@@ -204,7 +214,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         CRM_Core_DAO::disableFullGroupByMode();
         $tmp_table = CRM_Utils_SQL_TempTable::build()
             ->setMemory(true) // false for debugging
-            ->setDurable(false) // true for debugging
+            ->setDurable(true) // true for debugging
             ->setAutodrop(false) // todo: set to true to save memory? needs testing...
             ->createWithQuery($calculation_query);
 
@@ -217,6 +227,10 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         CRM_Core_DAO::executeQuery("
             INSERT IGNORE INTO civicrm_value_contact_results (entity_id)
             SELECT contact_id AS entity_id FROM {$tmp_table_name}");
+
+        // debugging
+        print_r("table name $tmp_table_name");
+        Civi::log()->debug("table name $tmp_table_name");
 
         // ... and return the value update query
         $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);

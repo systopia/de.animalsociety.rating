@@ -26,12 +26,13 @@ use CRM_Rating_ExtensionUtil as E;
  *
  * @group headless
  */
-abstract class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface
-
+class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface
 {
     use Api3TestTrait {
         callAPISuccess as protected traitCallAPISuccess;
     }
+
+    const DOUBLE_PRECISION = 0.0001;
 
     /** @var CRM_Core_Transaction current transaction */
     protected $transaction = null;
