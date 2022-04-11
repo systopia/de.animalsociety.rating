@@ -22,6 +22,9 @@ use CRM_Rating_ExtensionUtil as E;
  */
 class CRM_Rating_SqlQueries extends CRM_Rating_Base
 {
+    /** @var bool can be set to true for sql/data debugging */
+    const DEBUG = true;
+
     /***********************************************
      **               ACTIVITY-LEVEL              **
      ***********************************************/
@@ -48,7 +51,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         );
 
         // not needed: there needs to be some fields filled already in order to make an impact
-        //self::createMissingActivityCustomData();
+        self::createMissingActivityCustomData($activity_ids);
 
         // gather some values
         $activity_status_id = (int) CRM_Rating_Algorithm::getRatingActivityStatusPublished();
@@ -75,7 +78,8 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
               AND activity.status_id = {$activity_status_id}
               AND activity.activity_type_id = {$activity_type_id}";
         $tmp_table = CRM_Utils_SQL_TempTable::build()
-            ->setMemory(true)
+            ->setMemory(!self::DEBUG)
+            ->setDurable(self::DEBUG)
             ->setAutodrop(false)
             ->createWithQuery($new_values_query);
         CRM_Core_DAO::reenableFullGroupByMode();
@@ -106,7 +110,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
     protected static function getActivityScoreExpression($activity_rating_table, $activity_table)
     {
         // "Aktivitätsart-Koeffizient"
-        list($field_group, $field_name) = explode('.', self::ACTIVITY_KIND);
+        [$field_group, $field_name] = explode('.', self::ACTIVITY_KIND);
         $kind_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $kind_coefficient = self::createSqlMappingExpression(
             "{$activity_rating_table}.{$kind_coefficient_field['column_name']}",
@@ -114,7 +118,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         );
 
         // "Gewichtungskoeffizient"
-        list($field_group, $field_name) = explode('.', self::ACTIVITY_WEIGHT);
+        [$field_group, $field_name] = explode('.', self::ACTIVITY_WEIGHT);
         $weight_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $weight_coefficient = self::createSqlMappingExpression(
             "{$activity_rating_table}.{$weight_coefficient_field['column_name']}",
@@ -125,7 +129,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $age_coefficient = "0.75 / (POWER(((DATEDIFF(NOW(), {$activity_table}.activity_date_time)/365.0)/2.9), 4) + 1.0) + 0.25";
 
         // "Gewichtete Note"
-        list($field_group, $field_name) = explode('.', self::ACTIVITY_SCORE);
+        [$field_group, $field_name] = explode('.', self::ACTIVITY_SCORE);
         $score_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $score_coefficient = self::createSqlMappingExpression(
             "{$activity_rating_table}.{$score_coefficient_field['column_name']}",
@@ -176,24 +180,21 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::getFieldName(self::ACTIVITY_WEIGHT)
         );
         $weight_coefficient = self::createSqlMappingExpression(
-            self::ACTIVITY_GROUP,
+            "activity_data.{$activity_weight_field['column_name']}",
             self::ACTIVITY_WEIGHT_MAPPING
         );
 
         // remark: adding 0.00000001 weight to avoid divide by zero
         $CATEGORY_SUMIFS = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            // todo: use mapping instead of '/ 10.0'
-            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), {$activity_score_field['column_name']}, 0.0)) / (SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_weight_field['column_name']}, 0.0) / 10.0) + 0.00000001) AS {$column_name},\n";
+            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_score_field['column_name']}, 0.0) / ({$weight_coefficient})) AS {$column_name},\n";
         }
-        // todo: use mapping instead of '/ 10.0'
         $calculation_query = "
             SELECT
                 contact.id                                                AS contact_id,
                 COUNT(activity.id)                                        AS activity_count,
-                {$weight_coefficient}                                     AS weight_factor,
                 {$CATEGORY_SUMIFS}
-                SUM(activity_data.{$activity_score_field['column_name']}) / (SUM(activity_data.{$activity_weight_field['column_name']} / 10.0) + 0.00000001) AS overall_rating
+                SUM(activity_data.{$activity_score_field['column_name']}) / (SUM({$weight_coefficient}) + 0.00000001) AS overall_rating
             FROM civicrm_contact contact
             LEFT JOIN civicrm_activity_contact activity_link
                    ON activity_link.contact_id = contact.id
@@ -213,8 +214,8 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         // create a temp table with the results, because we'd run into a "Can't update table in stored function/trigger because it is already used by statement which invoked this stored function/trigger"
         CRM_Core_DAO::disableFullGroupByMode();
         $tmp_table = CRM_Utils_SQL_TempTable::build()
-            ->setMemory(true) // false for debugging
-            ->setDurable(true) // true for debugging
+            ->setMemory(!self::DEBUG)
+            ->setDurable(self::DEBUG)
             ->setAutodrop(false) // todo: set to true to save memory? needs testing...
             ->createWithQuery($calculation_query);
 
@@ -359,10 +360,13 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      * @param array $mapping
      *   from / to int or float pairs
      *
+     * @param string $fallback
+     *   fallback value
+     *
      * @return string
      *   generated expression
      */
-    protected static function createSqlMappingExpression($value_source, $mapping, $from_type = 'int', $to_type = 'float')
+    protected static function createSqlMappingExpression($value_source, $mapping, $from_type = 'int', $to_type = 'float', $fallback = null)
     {
         $expression = "CASE ";
         foreach ($mapping as $from => $to) {
@@ -385,6 +389,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             }
             $expression .= " WHEN {$value_source} = {$from} THEN {$to} ";
         }
+        if ($fallback !== null) {
+            $expression .= " ELSE {$fallback}";
+        }
         $expression .= " END ";
         return $expression;
     }
@@ -402,5 +409,36 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             $qualified_field_name = explode('.', $qualified_field_name);
         }
         return $qualified_field_name[1];
+    }
+
+    /**
+     * Generate missing entries in the activity custom data table
+     *
+     * @param string|array $activity_ids
+     *
+     * @return void
+     */
+    protected static function createMissingActivityCustomData($activity_ids)
+    {
+        // get the group table
+        $activity_data_table = CRM_Rating_CustomData::getGroupTable(self::ACTIVITY_GROUP);
+
+        if ($activity_ids != 'all') {
+            if (!is_array($activity_ids)) {
+                $activity_ids = [$activity_ids];
+            }
+            $activity_ids = array_map('intval', $activity_ids);
+            $activity_id_selector = "IN(" . implode(',', $activity_ids) . ')';
+            CRM_Core_DAO::executeQuery("
+            INSERT IGNORE INTO {$activity_data_table} (entity_id)
+            SELECT id FROM civicrm_activity WHERE id {$activity_id_selector}");
+        } else {
+            $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
+            CRM_Core_DAO::executeQuery("
+            INSERT IGNORE (entity_id) INTO {$activity_data_table}
+            VALUES (
+                SELECT id FROM civicrm_activity WHERE activity_type_id = {$activity_type_id}
+            )");
+        }
     }
 }

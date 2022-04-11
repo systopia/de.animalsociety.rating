@@ -74,10 +74,10 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
         $this->refreshRating($contact['id'], 'Contact', 1);
 
         // calculate ratings
-        //$category_rating = $this->getRating($contact['id'], CRM_Rating_Base::LIVESTOCK_RATING);
+        $new_category_rating = $this->getRating($contact['id'], CRM_Rating_Base::LIVESTOCK_RATING);
 
         // should be weight * age * type * score
-        $this->assertEquals(1.0 * 1.0 * 2 * 7 , $category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION);
+        $this->assertNotEquals(1.0 * 1.0 * 2 * 7 , $new_category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION);
     }
 
     /**
@@ -152,11 +152,12 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
         $ballast_activity = $this->createPoliticalActivity(
             $contact_id,
             [
+                'subject' => 'BALLAST',
                 'activity_date_time' => date('YmdHis', strtotime("now")), // now
                 CRM_Rating_Base::ACTIVITY_CATEGORY => $category_value,
                 CRM_Rating_Base::ACTIVITY_KIND => 3,    // ballast?
                 CRM_Rating_Base::ACTIVITY_SCORE => 5,   // average
-                CRM_Rating_Base::ACTIVITY_WEIGHT => 10,  // 1
+                CRM_Rating_Base::ACTIVITY_WEIGHT => 20,  // 2.0
             ]
         );
         $this->assertNotEmpty($ballast_activity, "Political Activity not created");

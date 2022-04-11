@@ -127,13 +127,15 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
     {
         // set mandatory attributes
         $attributes['activity_type_id'] = CRM_Rating_Base::getRatingActivityTypeID();
-        $attributes['subject'] = $this->randomString();
         $attributes['target_id'] = $contact_id;
         $attributes['source_contact_id'] = $contact_id;
         $attributes['activity_status_id'] = CRM_Rating_Base::getRatingActivityStatusPublished();
         $attributes['activity_date_time'] = date('YmdHis', strtotime($attributes['activity_date_time'] ?? 'now'));
 
         // fill missing attributes
+        if (empty($attributes['subject'])) {
+            $attributes['subject'] = $this->randomString();
+        }
         if (empty($attributes[CRM_Rating_Base::ACTIVITY_TITLE])) {
             $attributes[CRM_Rating_Base::ACTIVITY_TITLE] = $this->randomString();
         }
