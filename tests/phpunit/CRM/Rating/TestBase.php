@@ -32,6 +32,7 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
         callAPISuccess as protected traitCallAPISuccess;
     }
 
+    /** @var float precision to be used to verify whether calculated float values are identical */
     const DOUBLE_PRECISION = 0.0001;
 
     /** @var CRM_Core_Transaction current transaction */
@@ -231,6 +232,38 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
     public function getOverallContactRating($contact_id)
     {
         return $this->getRating($contact_id, CRM_Rating_Base::OVERALL_RATING);
+    }
+
+    /**
+     * Get the given activity
+     *
+     * @param integer $activity_id
+     *
+     * @return array entity data
+     */
+    public function loadActivity($activity_id)
+    {
+        $activity_id = (int) $activity_id;
+        $this->assertGreaterThan(0, $activity_id, "Bad activity ID");
+        $data = $this->traitCallAPISuccess('Activity', 'getsingle', [
+            'id' => $activity_id
+        ]);
+        CRM_Rating_CustomData::labelCustomFields($data);
+        return $data;
+    }
+
+    /**
+     * Shorthand to reload the activity data based on the id
+     *
+     * @param array $activity_data
+     *
+     * @return array updated activity data
+     */
+    public function reloadActivity($activity_data)
+    {
+        $this->assertArrayHasKey('id', $activity_data, "No id given");
+        $this->assertNotEmpty($activity_data['id'], "No id given");
+        return $this->loadActivity($activity_data['id']);
     }
 
     /**

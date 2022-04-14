@@ -30,7 +30,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      ***********************************************/
 
     /**
-     * Generate a SQL query to recalculate score of the given activity
+     * Generate a SQL query to recalculate score (rating_weighted) of the given activity
      *
      * @param array|string $activity_ids
      *   activity IDs to update
@@ -88,11 +88,15 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $tmp_table_name = $tmp_table->getName();
         CRM_Core_DAO::executeQuery("ALTER TABLE {$tmp_table_name} ADD INDEX activity_id(activity_id);");
 
-        // ... and return the value update query
+        /* for some weird, very annoying reason, the following doesn't work:
         return "
             UPDATE {$activity_data_table} activity_rating
             INNER JOIN {$tmp_table_name} new_values ON new_values.activity_id = activity_rating.entity_id
             SET activity_rating.{$target_field['column_name']} = new_values.rating;";
+        */
+
+        // workaround: return the select query
+        return "SELECT activity_id, rating FROM {$tmp_table_name}";
     }
 
     /**
@@ -228,10 +232,6 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         CRM_Core_DAO::executeQuery("
             INSERT IGNORE INTO civicrm_value_contact_results (entity_id)
             SELECT contact_id AS entity_id FROM {$tmp_table_name}");
-
-        // debugging
-        print_r("table name $tmp_table_name");
-        Civi::log()->debug("table name $tmp_table_name");
 
         // ... and return the value update query
         $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);

@@ -35,7 +35,24 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
     {
         $timestamp = microtime(true);
         $query = CRM_Rating_SqlQueries::getActivityScoreUpdateQuery($activity_ids);
-        CRM_Core_DAO::executeQuery($query);
+        // @todo originally, this *is* the query applying the value updates to the DB table. But, For some crazy reason
+        //  that doesn't work. Maybe it's hidden transactions, magic, or the evil eye.
+        $result = CRM_Core_DAO::executeQuery($query);
+
+        // WORKAROUND: fetch the entries individually, and run update queries (SLOW!!)
+        $activity_data_table = CRM_Rating_CustomData::getGroupTable(self::ACTIVITY_GROUP);
+        $target_field = CRM_Rating_CustomData::getCustomField(
+            self::ACTIVITY_GROUP,
+            CRM_Rating_SqlQueries::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
+        );
+        $query = "UPDATE {$activity_data_table} activity_rating SET {$target_field['column_name']} = %1 WHERE entity_id = %2";
+        while($result->fetch()) {
+            if ($result->rating) {
+                CRM_Core_DAO::executeQuery($query, [1 => [$result->rating, 'Float'], 2 => [$result->activity_id, 'Integer']]);
+            }
+        }
+
+        // wrap up
         $runtime = microtime(true) - $timestamp;
         $count = $activity_ids == 'all' ? 'all' : count($activity_ids);
         self::log("Updating {$count} activities took {$runtime} seconds.");
