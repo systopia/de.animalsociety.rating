@@ -51,7 +51,7 @@ class CRM_Rating_BasicTest extends CRM_Rating_TestBase
 
 
         // create an activity
-        $activity = $this->createPoliticalActivity($contact['id']);
+        $activity = $this->createPoliticalActivity($contact['id'], [CRM_Rating_Base::ACTIVITY_SCORE => 7]);
         $this->assertNotEmpty($activity, "Political Activity not created");
 
         // recalculate

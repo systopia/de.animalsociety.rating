@@ -24,6 +24,9 @@ use CRM_Rating_ExtensionUtil as E;
  */
 class CRM_Rating_PerformanceTest extends CRM_Rating_TestBase
 {
+    const LOW_NUMBER = 1; // 10
+    const HIGH_NUMBER = 1; // 100
+
     use Api3TestTrait {
         callAPISuccess as protected traitCallAPISuccess;
     }
@@ -43,7 +46,7 @@ class CRM_Rating_PerformanceTest extends CRM_Rating_TestBase
      */
     public function testFewContactsManyActivities()
     {
-        //$this->runPerformanceTest(10, 100);
+        $this->runPerformanceTest(self::LOW_NUMBER, self::HIGH_NUMBER);
     }
 
     /**
@@ -51,7 +54,7 @@ class CRM_Rating_PerformanceTest extends CRM_Rating_TestBase
      */
     public function testManyContactsFewActivities()
     {
-        //->runPerformanceTest(100, 10);
+        $this->runPerformanceTest(self::HIGH_NUMBER, self::LOW_NUMBER);
     }
 
     /**
