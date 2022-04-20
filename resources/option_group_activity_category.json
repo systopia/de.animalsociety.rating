@@ -1,7 +1,7 @@
 {
   "_lookup": ["name"],
   "name": "activity_category",
-  "title": "Activity category",
+  "title": "Rating Activity category",
   "description": "",
   "_values": [
     {

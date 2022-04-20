@@ -1,7 +1,7 @@
 {
   "_lookup": ["name"],
   "name": "activity_weight",
-  "title": "Activity Weight",
+  "title": "Rating Activity Weight",
   "description": "",
   "_values": [
     {
