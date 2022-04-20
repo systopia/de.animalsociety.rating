@@ -191,14 +191,14 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         // remark: adding 0.00000001 weight to avoid divide by zero
         $CATEGORY_SUMIFS = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_score_field['column_name']}, 0.0)) / SUM(IF(activity_data.category IN({$categories}), 1.0, 0.0000000001)) AS {$column_name}, ";
+            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_score_field['column_name']}, 0.0)) / SUM(IF(activity_data.category IN({$categories}), {$weight_coefficient}, 0.0000000001)) AS {$column_name}, \n";
         }
         $calculation_query = "
             SELECT
                 contact.id                                                AS contact_id,
                 COUNT(activity.id)                                        AS activity_count,
                 {$CATEGORY_SUMIFS}
-                SUM(activity_data.{$activity_score_field['column_name']}) / SUM(1.0) AS overall_rating
+                SUM(activity_data.{$activity_score_field['column_name']}) / SUM({$weight_coefficient}) AS overall_rating
             FROM civicrm_contact contact
             LEFT JOIN civicrm_activity_contact activity_link
                    ON activity_link.contact_id = contact.id

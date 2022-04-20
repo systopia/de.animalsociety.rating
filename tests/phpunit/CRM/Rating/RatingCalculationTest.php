@@ -66,7 +66,7 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
 
         // should be weight * age * type * score
         // todo: include ballast (3)
-        $this->assertEquals(1.0 * 1.0 * 2 * 7, $category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION);
+        $this->assertEquals(1.0 * 1.0 * 2.0 * 7.0, $category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION_LOW);
 
 
         // now try with an explicit ballast activity and calculate again
@@ -77,7 +77,7 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
         $new_category_rating = $this->getRating($contact['id'], CRM_Rating_Base::LIVESTOCK_RATING);
 
         // should be weight * age * type * score
-        $this->assertEquals(1.0 * 1.0 * 2 * 7 , $new_category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION);
+        $this->assertEquals(1.0 * 1.0 * 2.0 * 7.0 , $new_category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION_LOW);
     }
 
     /**
@@ -102,6 +102,9 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
             ]
         );
         $this->assertNotEmpty($activity_1, "Political Activity not created");
+        $this->refreshRating($activity_1['id'], 'Activity');
+        $activity_1 = $this->reloadActivity($activity_1);
+        $this->assertEquals(14.0, $activity_1[CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED], "The weight calculation seems wrong.");
 
         // create activity_2
         $activity_2 = $this->createPoliticalActivity(
@@ -115,6 +118,9 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
             ]
         );
         $this->assertNotEmpty($activity_2, "Political Activity not created");
+        $this->refreshRating($activity_2['id'], 'Activity');
+        $activity_2 = $this->reloadActivity($activity_2);
+        $this->assertEquals(148.43, $activity_2[CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED], "The weight calculation seems wrong.", self::DOUBLE_PRECISION_LOW);
 
         // create ballast
         $activity_3 = $this->createPoliticalActivity(
@@ -122,12 +128,15 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
             [
                 'activity_date_time' => date('YmdHis', strtotime("now")), // now
                 CRM_Rating_Base::ACTIVITY_CATEGORY => 1, // livestock
-                CRM_Rating_Base::ACTIVITY_KIND => 3,    // ballast?
-                CRM_Rating_Base::ACTIVITY_SCORE => 5,   // average
-                CRM_Rating_Base::ACTIVITY_WEIGHT => 10,  // 1
+                CRM_Rating_Base::ACTIVITY_KIND => 3,     // ballast?
+                CRM_Rating_Base::ACTIVITY_SCORE => 5,    // average
+                CRM_Rating_Base::ACTIVITY_WEIGHT => 10,  // 1.0
             ]
         );
         $this->assertNotEmpty($activity_3, "Political Activity not created");
+        $this->refreshRating($activity_3['id'], 'Activity');
+        $activity_3 = $this->reloadActivity($activity_3);
+        $this->assertEquals(15.0, $activity_3[CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED], "The weight calculation seems wrong.", self::DOUBLE_PRECISION_LOW);
 
         // calculate ratings
         $this->refreshRating($contact['id'], 'Contact', 1);

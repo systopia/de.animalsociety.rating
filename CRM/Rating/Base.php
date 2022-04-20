@@ -132,15 +132,15 @@ abstract class CRM_Rating_Base
 
     /** @var array @var list of activity kind coefficient */
     const ACTIVITY_KIND_MAPPING = [
-        1 => 1, // public communication
-        2 => 2, // speech
-        3 => 3, // program item
-        4 => 4, // Extra-parliamentary work
-        5 => 5, // Parliamentary question
-        6 => 6, // participation draft law
-        7 => 7, // Vote on subsidies
-        8 => 7, // Vote on public contract
-        10 => 10, // Vote on draft law
+        1 => 1.0, // public communication
+        2 => 2.0, // speech
+        3 => 3.0, // program item
+        4 => 4.0, // Extra-parliamentary work
+        5 => 5.0, // Parliamentary question
+        6 => 6.0, // participation draft law
+        7 => 7.0, // Vote on subsidies
+        8 => 7.0, // Vote on public contract
+        10 => 10.0, // Vote on draft law
     ];
 
     /** @var array Mapping for weight coefficient */
@@ -154,10 +154,11 @@ abstract class CRM_Rating_Base
 
     /** @var array Mapping of score  */
     const ACTIVITY_SCORE_MAPPING = [
-        0 => 0,     // bad
-        3 => 3,     // rather bad
-        7 => 7,     // rather good
-        10 => 10,   // good
+        0 => 0.0,     // bad
+        3 => 3.0,     // rather bad
+        5 => 5.0,     // average
+        7 => 7.0,     // rather good
+        10 => 10.0,   // good
     ];
 
 
