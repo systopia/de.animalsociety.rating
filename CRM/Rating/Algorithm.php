@@ -22,6 +22,9 @@ use CRM_Rating_ExtensionUtil as E;
  */
 class CRM_Rating_Algorithm extends CRM_Rating_Base
 {
+    const BALLAST_VALUE = 15.0;
+    const BALLAST_WEIGHT = 3.0;
+
     /**
      * Update the rating value of a selection of engagement activities
      *

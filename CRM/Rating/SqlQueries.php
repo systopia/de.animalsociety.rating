@@ -176,30 +176,37 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $activity_data_table = CRM_Rating_CustomData::getGroupTable(self::ACTIVITY_GROUP);
         $activity_status_id = (int) CRM_Rating_Algorithm::getRatingActivityStatusPublished();
         $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
-        $activity_score_field = CRM_Rating_CustomData::getCustomField(
+        $activity_rating_field = CRM_Rating_CustomData::getCustomField(
             self::ACTIVITY_GROUP,
             self::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
         );
+        $activity_score_field = CRM_Rating_CustomData::getCustomField(
+            self::ACTIVITY_GROUP,
+            self::getFieldName(self::ACTIVITY_SCORE)
+        );
         $activity_weight_field = CRM_Rating_CustomData::getCustomField(
             self::ACTIVITY_GROUP,
-            self::getFieldName(self::ACTIVITY_WEIGHT)
+            self::getFieldName(self::ACTIVITY_SCORE)
         );
-        $weight_coefficient = self::createSqlMappingExpression(
-            "activity_data.{$activity_weight_field['column_name']}",
-            self::ACTIVITY_WEIGHT_MAPPING
+        $activity_kind_field = CRM_Rating_CustomData::getCustomField(
+            self::ACTIVITY_GROUP,
+            self::getFieldName(self::ACTIVITY_KIND)
         );
 
-        // remark: adding 0.00000001 weight to avoid divide by zero
+        // ballast parameters
+        $ballast_value  = CRM_Rating_Algorithm::BALLAST_VALUE;
+        $ballast_weight = CRM_Rating_Algorithm::BALLAST_WEIGHT;
+
         $CATEGORY_SUMIFS = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $CATEGORY_SUMIFS .= "SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_score_field['column_name']}, 0.0)) / SUM(IF(activity_data.category IN({$categories}), {$weight_coefficient}, 0.0000000001)) AS {$column_name}, \n";
+            $CATEGORY_SUMIFS .= "(SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_rating_field['column_name']}, 0.0)) + {$ballast_value}) / (SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_rating_field['column_name']} / {$activity_weight_field['column_name']}, 0)) + {$ballast_weight}) AS {$column_name}, \n";
         }
         $calculation_query = "
             SELECT
                 contact.id                                                AS contact_id,
                 COUNT(activity.id)                                        AS activity_count,
                 {$CATEGORY_SUMIFS}
-                SUM(activity_data.{$activity_score_field['column_name']}) / SUM({$weight_coefficient}) AS overall_rating
+                (SUM(activity_data.{$activity_rating_field['column_name']}) + {$ballast_value}) / (SUM(activity_data.{$activity_rating_field['column_name']} / {$activity_weight_field['column_name']}) + {$ballast_weight}) AS overall_rating
             FROM civicrm_contact contact
             LEFT JOIN civicrm_activity_contact activity_link
                    ON activity_link.contact_id = contact.id
@@ -212,7 +219,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
               AND activity.activity_type_id = {$activity_type_id}
               AND activity.status_id = {$activity_status_id}
               AND contact.contact_type = '{$contact_type}'
-              AND activity_data.{$activity_score_field['column_name']} IS NOT NULL
+              AND activity_data.{$activity_rating_field['column_name']} IS NOT NULL
             GROUP BY contact.id
             ;";
 

@@ -34,7 +34,7 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
 
     /** @var float precision to be used to verify whether calculated float values are identical */
     const EQUALITY_PRECISION_95 = 1.05;
-    const DOUBLE_PRECISION_LOW  = 0.05;
+    const DOUBLE_PRECISION_LOW  = 0.1;
     const DOUBLE_PRECISION_HIGH = 0.0001;
 
     /** @var CRM_Core_Transaction current transaction */
