@@ -24,8 +24,8 @@ use CRM_Rating_ExtensionUtil as E;
  */
 class CRM_Rating_PerformanceTest extends CRM_Rating_TestBase
 {
-    const LOW_NUMBER = 1; // 10
-    const HIGH_NUMBER = 1; // 100
+    const LOW_NUMBER = 3;
+    const HIGH_NUMBER = 30;
 
     use Api3TestTrait {
         callAPISuccess as protected traitCallAPISuccess;
