@@ -33,7 +33,8 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
     }
 
     /** @var float precision to be used to verify whether calculated float values are identical */
-    const DOUBLE_PRECISION_LOW  = 0.15;
+    const EQUALITY_PRECISION_95 = 1.05;
+    const DOUBLE_PRECISION_LOW  = 0.05;
     const DOUBLE_PRECISION_HIGH = 0.0001;
 
     /** @var CRM_Core_Transaction current transaction */
@@ -57,6 +58,20 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
     public function tearDown()
     {
         parent::tearDown();
+    }
+
+    /**
+     * Assert that the value is with a relative precision
+     *
+     * @param mixed $expected_value
+     * @param mixed $current_value
+     * @param string $fail_message
+     * @param double $precision
+     */
+    public function assertEqualsWithPrecision($expected_value, $current_value, $fail_message, $precision = self::EQUALITY_PRECISION_95)
+    {
+        $delta = abs($expected_value * (1.0 - $precision));
+        $this->assertEquals($expected_value, $current_value, $fail_message, $delta);
     }
 
     /**
