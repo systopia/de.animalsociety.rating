@@ -88,7 +88,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $tmp_table_name = $tmp_table->getName();
         CRM_Core_DAO::executeQuery("ALTER TABLE {$tmp_table_name} ADD INDEX activity_id(activity_id);");
 
-        /* for some weird, very annoying reason, the following doesn't work:
+        /* for some weird, very annoying reason, the following doesn't work in my setup:
         return "
             UPDATE {$activity_data_table} activity_rating
             INNER JOIN {$tmp_table_name} new_values ON new_values.activity_id = activity_rating.entity_id
@@ -113,7 +113,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      */
     protected static function getActivityScoreExpression($activity_rating_table, $activity_table)
     {
-        // "Aktivitätsart-Koeffizient"
+        // type coefficient "Aktivitätsart-Koeffizient"
         [$field_group, $field_name] = explode('.', self::ACTIVITY_KIND);
         $kind_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $kind_coefficient = self::createSqlMappingExpression(
@@ -121,7 +121,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::ACTIVITY_KIND_MAPPING
         );
 
-        // "Gewichtungskoeffizient"
+        // weight coefficient "Gewichtungskoeffizient"
         [$field_group, $field_name] = explode('.', self::ACTIVITY_WEIGHT);
         $weight_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $weight_coefficient = self::createSqlMappingExpression(
@@ -129,10 +129,10 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::ACTIVITY_WEIGHT_MAPPING
         );
 
-        // "Alterskoeffizient"
+        // age coefficient "Alterskoeffizient"
         $age_coefficient = "0.75 / (POWER(((DATEDIFF(NOW(), {$activity_table}.activity_date_time)/365.0)/2.9), 4) + 1.0) + 0.25";
 
-        // "Gewichtete Note"
+        // score coefficient "Gewichtete Note"
         [$field_group, $field_name] = explode('.', self::ACTIVITY_SCORE);
         $score_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $score_coefficient = self::createSqlMappingExpression(
@@ -140,6 +140,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::ACTIVITY_SCORE_MAPPING
         );
 
+        // return as product of all coefficients
         return "( ({$kind_coefficient}) * ({$weight_coefficient}) * ({$score_coefficient}) * ({$age_coefficient}) )";
     }
 

@@ -141,7 +141,7 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
         // calculate contact ratings
         $this->refreshRating($contact['id'], 'Contact', 1);
         $category_rating = $this->getRating($contact['id'], CRM_Rating_Base::LIVESTOCK_RATING);
-//        $this->assertEquals(8.942065491, $category_rating, "Calculated livestock rating differs from expected rating.");
+        $this->assertEquals(8.942065491, $category_rating, "Calculated livestock rating differs from expected rating.");
     }
 
 
