@@ -73,7 +73,7 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
     public static function updateIndividuals($contact_ids = 'all')
     {
         $timestamp = microtime(true);
-        $query = CRM_Rating_SqlQueries::runContactAggregationUpdateQuery($contact_ids, 'Individual');
+        $query = CRM_Rating_SqlQueries::runPersonAggregationUpdateQuery($contact_ids);
         $runtime = microtime(true) - $timestamp;
         $count = $contact_ids == 'all' ? 'all' : count($contact_ids);
         self::log("Updating {$count} contacts took {$runtime} seconds.");
@@ -91,7 +91,7 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
     public static function updateOrganisations($contact_ids = 'all')
     {
         $timestamp = microtime(true);
-        $query = CRM_Rating_SqlQueries::runContactAggregationUpdateQuery($contact_ids, 'Organization');
+        $query = CRM_Rating_SqlQueries::runOrganisationAggregationUpdateQuery($contact_ids);
         $runtime = microtime(true) - $timestamp;
         $count = $contact_ids == 'all' ? 'all' : count($contact_ids);
         self::log("Updating {$count} organisations took {$runtime} seconds.");

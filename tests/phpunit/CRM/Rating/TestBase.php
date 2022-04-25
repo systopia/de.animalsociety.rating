@@ -97,6 +97,34 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
     }
 
     /**
+     * Create a new party contact (organisation)
+     *
+     * @param array $party_details
+     *   overrides the default values
+     *
+     * @return array
+     *  contact data
+     */
+    public function createParty($party_details = [])
+    {
+        // prepare contact data
+        $contact_data = [
+            'contact_type'      => 'Organization',
+            'organization_name' => $this->randomString(10),
+        ];
+        foreach ($party_details as $key => $value) {
+            $contact_data[$key] = $value;
+        }
+        CRM_Rating_CustomData::resolveCustomFields($contact_data);
+
+        // create contact
+        $result = $this->traitCallAPISuccess('Contact', 'create', $contact_data);
+        $contact = $this->traitCallAPISuccess('Contact', 'getsingle', ['id' => $result['id']]);
+        CRM_Rating_CustomData::labelCustomFields($contact);
+        return $contact;
+    }
+
+    /**
      * Create a new contact
      *
      * @param array $contact_details
@@ -114,6 +142,7 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
             'last_name'    => $this->randomString(10),
             'email'        => $this->randomString(10) . '@' . $this->randomString(10) . '.org',
             'prefix_id'    => 1,
+            CRM_Rating_Base::CONTACT_IMPORTANCE => 1
         ];
         foreach ($contact_details as $key => $value) {
             $contact_data[$key] = $value;
@@ -125,6 +154,24 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
         $contact = $this->traitCallAPISuccess('Contact', 'getsingle', ['id' => $result['id']]);
         CRM_Rating_CustomData::labelCustomFields($contact);
         return $contact;
+    }
+
+    /**
+     * Make the given individual a member of the given party
+     *
+     * @param integer $individual_contact_id
+     * @param integer $party_id
+     *
+     * @return integer relationship ID
+     */
+    public function joinParty($individual_contact_id, $party_id)
+    {
+        $this->traitCallAPISuccess('Relationship', 'create', [
+            'contact_id_a' => $individual_contact_id,
+            'contact_id_b' => $party_id,
+            'relationship_type_id' => CRM_Rating_Base::getPartyMemberRelationshipTypeId(),
+            'is_active' => 1
+        ]);
     }
 
     /**
@@ -269,6 +316,24 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
     }
 
     /**
+     * Get the given activity
+     *
+     * @param integer $contact_id
+     *
+     * @return array entity data
+     */
+    public function loadContact($contact_id)
+    {
+        $contact_id = (int) $contact_id;
+        $this->assertGreaterThan(0, $contact_id, "Bad activity ID");
+        $data = $this->traitCallAPISuccess('Contact', 'getsingle', [
+            'id' => $contact_id
+        ]);
+        CRM_Rating_CustomData::labelCustomFields($data);
+        return $data;
+    }
+
+    /**
      * Shorthand to reload the activity data based on the id
      *
      * @param array $activity_data
@@ -280,6 +345,20 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
         $this->assertArrayHasKey('id', $activity_data, "No id given");
         $this->assertNotEmpty($activity_data['id'], "No id given");
         return $this->loadActivity($activity_data['id']);
+    }
+
+    /**
+     * Shorthand to reload the contact data based on the id
+     *
+     * @param array $contact_data
+     *
+     * @return array updated activity data
+     */
+    public function reloadContact($contact_data)
+    {
+        $this->assertArrayHasKey('id', $contact_data, "No id given");
+        $this->assertNotEmpty($contact_data['id'], "No id given");
+        return $this->loadContact($contact_data['id']);
     }
 
     /**

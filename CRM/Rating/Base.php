@@ -29,6 +29,10 @@ abstract class CRM_Rating_Base
     /** @var string custom field key for the activity status */
     const ACTIVITY_STATUS = 'published';
 
+    /** @var string relationship type name for party membership */
+    // todo: get rid of localised phrase
+    const PARTY_MEMBER_RELATIONSHIP_NAME_A_B = 'Ist Parteimitglied von';
+
     /**
      * FIELDS of contact_results custom group.
      */
@@ -285,6 +289,49 @@ abstract class CRM_Rating_Base
             ]);
         }
         return $activity_status_published_id;
+    }
+
+    /**
+     * Get the relationship type ID for "political party <-> party member" relationship
+     *
+     * @return integer the relationship type ID
+     */
+    public static function getPartyMemberRelationshipTypeId()
+    {
+        static $relation_type_id = null;
+        if ($relation_type_id === null) {
+            // find the membership relationship type
+            $type_search = civicrm_api3('RelationshipType', 'get', [
+                'name_a_b' => self::PARTY_MEMBER_RELATIONSHIP_NAME_A_B,
+                'return' => 'id'
+            ]);
+
+            if (empty($type_search['id'])) {
+                // this has not been found and needs to be created
+                $type_search = civicrm_api3('RelationshipType', 'create', [
+                    'label_a_b' => E::ts("Ist Parteimitglied von"),
+                    'name_a_b' => self::PARTY_MEMBER_RELATIONSHIP_NAME_A_B,
+                    'label_b_a' => E::ts("Hat als Parteimitglied"),
+                    'name_b_a' => self::PARTY_MEMBER_RELATIONSHIP_NAME_A_B . '_ba',
+                    //'description' => $description,
+                    'contact_type_a' => 'Individual',
+                    //'contact_sub_type_a' => '',
+                    'contact_type_b' => 'Organization',
+                    //'contact_sub_type_b' => '',
+                    'is_active' => 1,
+                ]);
+                Civi::log()->debug("Relationship type %1 created.",
+                                   [1 => self::PARTY_MEMBER_RELATIONSHIP_NAME_A_B]);
+            }
+
+            if (empty($type_search['id'])) {
+                throw new CRM_Core_Exception(E::ts("Relationship type %1 is not available!",
+                                               [1 => self::PARTY_MEMBER_RELATIONSHIP_NAME_A_B]));
+                return 0;
+            } else {
+                return (int) $type_search['id'];
+            }
+        }
     }
 
     /**

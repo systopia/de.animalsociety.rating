@@ -141,30 +141,4 @@ class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
         $category_rating = $this->getRating($contact['id'], CRM_Rating_Base::LIVESTOCK_RATING);
         $this->assertEquals(8.942065491, $category_rating, "Calculated livestock rating differs from expected rating.", self::DOUBLE_PRECISION_LOW);
     }
-
-
-    /**
-     * Helper function to add an explicit ballast activity.
-     *  This is for testing only and should later be removed in favour of a 'virtual' ballast that's part of the algorithm
-     *
-     * @param $contact_id
-     * @param $category_value
-     *
-     * @return void
-     */
-    protected function addBallastActivity($contact_id, $category_value)
-    {
-        $ballast_activity = $this->createPoliticalActivity(
-            $contact_id,
-            [
-                'subject' => 'BALLAST',
-                'activity_date_time' => date('YmdHis', strtotime("now")), // now
-                CRM_Rating_Base::ACTIVITY_CATEGORY => $category_value,
-                CRM_Rating_Base::ACTIVITY_KIND => 3,    // ballast?
-                CRM_Rating_Base::ACTIVITY_SCORE => 5,   // average
-                CRM_Rating_Base::ACTIVITY_WEIGHT => 20,  // 2.0
-            ]
-        );
-        $this->assertNotEmpty($ballast_activity, "Political Activity not created");
-    }
 }

@@ -25,6 +25,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
     /** @var bool can be set to true for sql/data debugging */
     const DEBUG = true;
 
+    /** @var bool can be set to true for tmp table dropping */
+    const AUTO_DROP = false; // todo: set to true to save memory? needs testing...
+
     /***********************************************
      **               ACTIVITY-LEVEL              **
      ***********************************************/
@@ -80,7 +83,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $tmp_table = CRM_Utils_SQL_TempTable::build()
             ->setMemory(!self::DEBUG)
             ->setDurable(self::DEBUG)
-            ->setAutodrop(false)
+            ->setAutodrop(self::AUTO_DROP)
             ->createWithQuery($new_values_query);
         CRM_Core_DAO::reenableFullGroupByMode();
 
@@ -147,7 +150,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
 
 
     /***********************************************
-     **               CONTACT-LEVEL               **
+     **              INDIVIDUAL-LEVEL             **
      ***********************************************/
 
     /**
@@ -159,7 +162,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
      * @throws Exception
      *   if something's wrong with the expected data structure
      */
-    public static function runContactAggregationUpdateQuery($contact_ids = 'all', $contact_type = 'Individual')
+    public static function runPersonAggregationUpdateQuery($contact_ids = 'all')
     {
         // extract contact ID restrictions
         if ($contact_ids != 'all') {
@@ -167,9 +170,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
                 $contact_ids = [$contact_ids];
             }
             $contact_ids = array_map('intval', $contact_ids);
-            $contact_id_selector = "contact.id IN(" . implode(',', $contact_ids) . ')';
+            $contact_id_selector = "(contact.contact_type = 'Individual' AND contact.id IN(" . implode(',', $contact_ids) . '))';
         } else {
-            $contact_id_selector = 'contact.is_deleted = 0';
+            $contact_id_selector = "(contact.contact_type = 'Individual' AND contact.is_deleted = 0)";
         }
 
         // generate temp table with the values
@@ -180,17 +183,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             self::ACTIVITY_GROUP,
             self::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
         );
-        $activity_score_field = CRM_Rating_CustomData::getCustomField(
-            self::ACTIVITY_GROUP,
-            self::getFieldName(self::ACTIVITY_SCORE)
-        );
         $activity_weight_field = CRM_Rating_CustomData::getCustomField(
             self::ACTIVITY_GROUP,
             self::getFieldName(self::ACTIVITY_SCORE)
-        );
-        $activity_kind_field = CRM_Rating_CustomData::getCustomField(
-            self::ACTIVITY_GROUP,
-            self::getFieldName(self::ACTIVITY_KIND)
         );
 
         // ballast parameters
@@ -218,7 +213,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             WHERE {$contact_id_selector}
               AND activity.activity_type_id = {$activity_type_id}
               AND activity.status_id = {$activity_status_id}
-              AND contact.contact_type = '{$contact_type}'
+              AND contact.contact_type = 'Individual'
               AND activity_data.{$activity_rating_field['column_name']} IS NOT NULL
             GROUP BY contact.id
             ;";
@@ -228,7 +223,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $tmp_table = CRM_Utils_SQL_TempTable::build()
             ->setMemory(!self::DEBUG)
             ->setDurable(self::DEBUG)
-            ->setAutodrop(false) // todo: set to true to save memory? needs testing...
+            ->setAutodrop(self::AUTO_DROP)
             ->createWithQuery($calculation_query);
 
         // add index...
@@ -255,6 +250,173 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         CRM_Core_DAO::executeQuery($update_query);
     }
 
+
+    /***********************************************
+     **           PARTY/ORGANISATION-LEVEL        **
+     ***********************************************/
+
+    /**
+     * Run a SQL query to recalculate score of the given contacts
+     *
+     * @param array|string $contact_ids
+     *   activity IDs to update
+     *
+     * @throws Exception
+     *   if something's wrong with the expected data structure
+     */
+    public static function runOrganisationAggregationUpdateQuery($contact_ids = 'all')
+    {
+        // extract contact ID restrictions
+        if ($contact_ids != 'all') {
+            if (!is_array($contact_ids)) {
+                $contact_ids = [$contact_ids];
+            }
+            $contact_ids = array_map('intval', $contact_ids);
+            $contact_id_selector = "(contact.contact_type = 'Organization' AND contact.id IN(" . implode(',', $contact_ids) . '))';
+        } else {
+            $contact_id_selector = "(contact.contact_type = 'Organization' AND contact.is_deleted = 0)";
+        }
+
+        /************************************************
+         **      1/10: ORGANISATION'S OWN ACTIVITIES   **
+         **       (algorithm identical to persons')    **
+         **       results in {$activity_tmp_table}     **
+         ************************************************/
+
+        // ballast parameters
+        $ballast_value  = CRM_Rating_Algorithm::BALLAST_VALUE;
+        $ballast_weight = CRM_Rating_Algorithm::BALLAST_WEIGHT;
+
+        // look up fields
+        $activity_data_table = CRM_Rating_CustomData::getGroupTable(self::ACTIVITY_GROUP);
+        $activity_status_id = (int) CRM_Rating_Algorithm::getRatingActivityStatusPublished();
+        $activity_type_id = (int) CRM_Rating_Algorithm::getRatingActivityTypeID();
+        $activity_rating_field = CRM_Rating_CustomData::getCustomField(
+            self::ACTIVITY_GROUP,
+            self::getFieldName(self::ACTIVITY_RATING_WEIGHTED)
+        );
+        $activity_weight_field = CRM_Rating_CustomData::getCustomField(
+            self::ACTIVITY_GROUP,
+            self::getFieldName(self::ACTIVITY_SCORE)
+        );
+
+        $CATEGORY_SUMIFS = '';
+        foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
+            $CATEGORY_SUMIFS .= "(SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_rating_field['column_name']}, 0.0)) + {$ballast_value}) / (SUM(IF(activity_data.category IN({$categories}), activity_data.{$activity_rating_field['column_name']} / {$activity_weight_field['column_name']}, 0)) + {$ballast_weight}) AS {$column_name}, \n";
+        }
+        $activity_calculation_query = "
+            SELECT
+                contact.id AS contact_id,
+                {$CATEGORY_SUMIFS}
+                (SUM(activity_data.{$activity_rating_field['column_name']}) + {$ballast_value}) / (SUM(activity_data.{$activity_rating_field['column_name']} / {$activity_weight_field['column_name']}) + {$ballast_weight}) AS overall_rating
+            FROM civicrm_contact contact
+            LEFT JOIN civicrm_activity_contact activity_link
+                   ON activity_link.contact_id = contact.id
+                   AND record_type_id = 3
+            LEFT JOIN civicrm_activity activity
+                   ON activity_link.activity_id = activity.id
+            LEFT JOIN {$activity_data_table} activity_data
+                   ON activity_data.entity_id = activity.id
+            WHERE {$contact_id_selector}
+              AND activity.activity_type_id = {$activity_type_id}
+              AND activity.status_id = {$activity_status_id}
+              AND activity_data.{$activity_rating_field['column_name']} IS NOT NULL
+            GROUP BY contact.id
+            ;";
+
+        // create a temp table with the results, because we'd run into a "Can't update table in stored function/trigger because it is already used by statement which invoked this stored function/trigger"
+        CRM_Core_DAO::disableFullGroupByMode();
+        $activity_tmp_table = CRM_Utils_SQL_TempTable::build()
+            ->setMemory(!self::DEBUG)
+            ->setDurable(self::DEBUG)
+            ->setAutodrop(self::AUTO_DROP)
+            ->createWithQuery($activity_calculation_query);
+
+        // add index...
+        $activity_tmp_table_name = $activity_tmp_table->getName();
+        CRM_Core_DAO::executeQuery("ALTER TABLE {$activity_tmp_table_name} ADD INDEX contact_id(contact_id);");
+        CRM_Core_DAO::reenableFullGroupByMode();
+
+
+
+        /************************************************
+         **    9/10: ORGANISATION MEMBERS' RATINGS     **
+         **          aggregate members' ratings        **
+         **       results in {$activity_tmp_table}     **
+         ************************************************/
+
+        $membership_relationship_type_id = self::getPartyMemberRelationshipTypeId();
+        $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);
+
+        $CATEGORY_AGGREGATION = '';
+        foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
+            $CATEGORY_AGGREGATION .= "IFNULL(SUM(member_scores.$column_name) / SUM(member_scores.contact_importance), 0) AS {$column_name}, \n";
+        }
+        $members_calculation_query = "
+            SELECT
+                contact.id                      AS contact_id,
+                {$CATEGORY_AGGREGATION}
+                IFNULL(SUM(member_scores.overall_rating) / SUM(member_scores.contact_importance), 0)
+                                                AS members_total_rating
+            FROM civicrm_contact contact
+            INNER JOIN civicrm_relationship membership
+                   ON membership.contact_id_b = contact.id
+                   AND membership.relationship_type_id = {$membership_relationship_type_id}
+                   AND membership.is_active = 1
+            INNER JOIN civicrm_contact member
+                   ON membership.contact_id_a = member.id
+                   AND member.is_deleted = 0
+            LEFT JOIN {$contact_data_table} member_scores
+                   ON member_scores.entity_id = member.id
+            WHERE {$contact_id_selector}
+              AND contact.contact_type = 'Organization'
+            GROUP BY contact.id
+            ;";
+
+        // create a temp table with the results, because we'd run into a "Can't update table in stored function/trigger because it is already used by statement which invoked this stored function/trigger"
+        CRM_Core_DAO::disableFullGroupByMode();
+        $member_scores_tmp_table = CRM_Utils_SQL_TempTable::build()
+            ->setMemory(!self::DEBUG)
+            ->setDurable(self::DEBUG)
+            ->setAutodrop(self::AUTO_DROP)
+            ->createWithQuery($members_calculation_query);
+
+        // add index...
+        $member_scores_tmp_table_name = $member_scores_tmp_table->getName();
+        CRM_Core_DAO::executeQuery("ALTER TABLE {$member_scores_tmp_table_name} ADD INDEX contact_id(contact_id);");
+        CRM_Core_DAO::reenableFullGroupByMode();
+
+        /*************************************************
+         ** COMBINE OWN ACTIVITY'S AND MEMBER's RATINGS **
+         **************************************************/
+
+        // first, make sure the entries are all there
+        self::createMissingContactCustomData($contact_ids);
+//        CRM_Core_DAO::executeQuery("
+//            INSERT IGNORE INTO {$contact_data_table} (entity_id)
+//            SELECT contact_id AS entity_id FROM {$activity_tmp_table_name}");
+//        CRM_Core_DAO::executeQuery("
+//            INSERT IGNORE INTO {$contact_data_table} (entity_id)
+//            SELECT contact_id AS entity_id FROM {$member_scores_tmp_table_name}");
+
+        // then run the value update query
+        $update_query = "
+            UPDATE {$contact_data_table} contact_rating
+            INNER JOIN {$activity_tmp_table_name} activity_rating
+                    ON activity_rating.contact_id = contact_rating.entity_id
+            INNER JOIN {$member_scores_tmp_table_name} member_rating
+                    ON member_rating.contact_id = contact_rating.entity_id
+            SET contact_rating.overall_rating = (0.1 * IFNULL(activity_rating.overall_rating, 0.0) + 0.9 * IFNULL(member_rating.members_total_rating, 0.0))
+            WHERE activity_rating.contact_id IS NOT NULL OR member_rating.contact_id IS NOT NULL
+
+        ";
+        // todo: individual fields
+        //        foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
+        //            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = new_values.{$column_name}";
+        //        }
+
+        CRM_Core_DAO::executeQuery($update_query);
+    }
 
 
     /***************************************************
@@ -335,8 +497,29 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
     public static function getOrganisationIdsForContacts($contact_ids)
     {
         if ($contact_ids == 'all') return 'all';
-        Civi::log()->warning("getOrganisationIdsForContacts not implemented");
-        return [];
+
+        $organisation_ids = [];
+        $contact_ids = implode(',', array_map('intval', $contact_ids));
+        if (!empty($contact_ids)) {
+            $relationship_type_id = (int) CRM_Rating_Base::getPartyMemberRelationshipTypeId();
+            $query = "
+                SELECT DISTINCT(party.id) AS organisation_id
+                FROM civicrm_contact member
+                LEFT JOIN civicrm_relationship party_member
+                       ON member.id = party_member.contact_id_a
+                LEFT JOIN civicrm_contact party
+                       ON party.id  = party_member.contact_id_b
+                WHERE member.id IN ({$contact_ids})
+                  AND party_member.relationship_type_id = {$relationship_type_id}
+                  AND member.is_deleted = 0
+                  AND party.is_deleted = 0
+                  AND party_member.is_active = 1";
+            $result = CRM_Core_DAO::executeQuery($query)->fetchAll();
+            foreach ($result as $result_entry) {
+                $organisation_ids[] = $result_entry['organisation_id'];
+            }
+        }
+        return $organisation_ids;
     }
 
     /**
@@ -446,6 +629,37 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             CRM_Core_DAO::executeQuery("
             INSERT IGNORE INTO {$activity_data_table} (entity_id)
             SELECT id FROM civicrm_activity WHERE activity_type_id = {$activity_type_id}");
+        }
+    }
+
+    /**
+     * Generate missing entries in the activity custom data table
+     *
+     * @param string|array $contact_ids
+     *
+     * @return void
+     */
+    protected static function createMissingContactCustomData($contact_ids)
+    {
+        // get the group table
+        $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);
+
+        if ($contact_ids != 'all') {
+            if (!is_array($contact_ids)) {
+                $contact_ids = [$contact_ids];
+            }
+            $contact_ids = array_map('intval', $contact_ids);
+            $contact_id_selector = "IN(" . implode(',', $contact_ids) . ')';
+            $fill_query = "
+                INSERT IGNORE INTO {$contact_data_table} (entity_id)
+                SELECT id AS entity_id FROM civicrm_contact WHERE id {$contact_id_selector}";
+            CRM_Core_DAO::executeQuery($fill_query);
+        } else {
+            $relationship_type_id = (int) CRM_Rating_Base::getPartyMemberRelationshipTypeId();
+            // todo: there has to be a better way to fill the missing rows
+            CRM_Core_DAO::executeQuery("
+            INSERT IGNORE INTO {$contact_data_table} (entity_id)
+            SELECT contact_id_b FROM civicrm_relationship WHERE relationship_type_id = {$relationship_type_id}");
         }
     }
 }
