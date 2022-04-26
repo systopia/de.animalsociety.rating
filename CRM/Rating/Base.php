@@ -249,6 +249,9 @@ abstract class CRM_Rating_Base
         'activity_date_time'
     ];
 
+    /** @var int normal importance (for initialisation) */
+    const CONTACT_IMPORTANCE_NORMAL = 1;
+
     /**
      * Get the rating activity type ID
      *

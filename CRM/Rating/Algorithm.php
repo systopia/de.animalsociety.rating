@@ -95,6 +95,5 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
         $runtime = microtime(true) - $timestamp;
         $count = $contact_ids == 'all' ? 'all' : count($contact_ids);
         self::log("Updating {$count} organisations took {$runtime} seconds.");
-        self::log("WARNING: only organisation's own activities considered");
     }
 }

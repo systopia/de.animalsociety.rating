@@ -205,7 +205,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             FROM civicrm_contact contact
             LEFT JOIN civicrm_activity_contact activity_link
                    ON activity_link.contact_id = contact.id
-                   AND record_type_id = 3
+                   AND activity_link.record_type_id = 3
             LEFT JOIN civicrm_activity activity
                    ON activity_link.activity_id = activity.id
             LEFT JOIN {$activity_data_table} activity_data
@@ -214,7 +214,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
               AND activity.activity_type_id = {$activity_type_id}
               AND activity.status_id = {$activity_status_id}
               AND contact.contact_type = 'Individual'
-              AND activity_data.{$activity_rating_field['column_name']} IS NOT NULL
+              -- AND activity_data.{$activity_rating_field['column_name']} IS NOT NULL
             GROUP BY contact.id
             ;";
 
@@ -276,6 +276,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         } else {
             $contact_id_selector = "(contact.contact_type = 'Organization' AND contact.is_deleted = 0)";
         }
+
+        // first, make sure the entries in the contact custom fields are there
+        self::createMissingContactCustomData($contact_ids);
 
         /************************************************
          **      1/10: ORGANISATION'S OWN ACTIVITIES   **
@@ -390,16 +393,16 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
          ** COMBINE OWN ACTIVITY'S AND MEMBER's RATINGS **
          **************************************************/
 
-        // first, make sure the entries are all there
-        self::createMissingContactCustomData($contact_ids);
-//        CRM_Core_DAO::executeQuery("
-//            INSERT IGNORE INTO {$contact_data_table} (entity_id)
-//            SELECT contact_id AS entity_id FROM {$activity_tmp_table_name}");
-//        CRM_Core_DAO::executeQuery("
-//            INSERT IGNORE INTO {$contact_data_table} (entity_id)
-//            SELECT contact_id AS entity_id FROM {$member_scores_tmp_table_name}");
+//        // debugging:
+//        $debug_contact_tmp_ids = CRM_Core_DAO::executeQuery("SELECT entity_id FROM {$contact_data_table}")->fetchAll();
+//        $debug_activity_tmp_ids = CRM_Core_DAO::executeQuery("SELECT contact_id FROM {$activity_tmp_table_name}")->fetchAll();
+//        $debug_member_tmp_ids = CRM_Core_DAO::executeQuery("SELECT contact_id FROM {$member_scores_tmp_table_name}")->fetchAll();
 
         // then run the value update query
+        $INDIVIDUAL_FIELDS_SQL = '';
+        foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
+            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = (0.1 * IFNULL(activity_rating.{$column_name}, 0.0) + 0.9 * IFNULL(member_rating.{$column_name}, 0.0))";
+        }
         $update_query = "
             UPDATE {$contact_data_table} contact_rating
             INNER JOIN {$activity_tmp_table_name} activity_rating
@@ -407,14 +410,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             INNER JOIN {$member_scores_tmp_table_name} member_rating
                     ON member_rating.contact_id = contact_rating.entity_id
             SET contact_rating.overall_rating = (0.1 * IFNULL(activity_rating.overall_rating, 0.0) + 0.9 * IFNULL(member_rating.members_total_rating, 0.0))
+                {$INDIVIDUAL_FIELDS_SQL}
             WHERE activity_rating.contact_id IS NOT NULL OR member_rating.contact_id IS NOT NULL
-
         ";
-        // todo: individual fields
-        //        foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-        //            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = new_values.{$column_name}";
-        //        }
-
         CRM_Core_DAO::executeQuery($update_query);
     }
 
@@ -650,16 +648,32 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
             }
             $contact_ids = array_map('intval', $contact_ids);
             $contact_id_selector = "IN(" . implode(',', $contact_ids) . ')';
-            $fill_query = "
-                INSERT IGNORE INTO {$contact_data_table} (entity_id)
-                SELECT id AS entity_id FROM civicrm_contact WHERE id {$contact_id_selector}";
-            CRM_Core_DAO::executeQuery($fill_query);
+            $missing_entries_query = "
+                SELECT contact.id AS contact_id
+                FROM civicrm_contact contact
+                LEFT JOIN {$contact_data_table} data ON data.entity_id = contact.id
+                WHERE contact.id {$contact_id_selector}
+                  AND data.id IS NULL;";
         } else {
             $relationship_type_id = (int) CRM_Rating_Base::getPartyMemberRelationshipTypeId();
-            // todo: there has to be a better way to fill the missing rows
-            CRM_Core_DAO::executeQuery("
-            INSERT IGNORE INTO {$contact_data_table} (entity_id)
-            SELECT contact_id_b FROM civicrm_relationship WHERE relationship_type_id = {$relationship_type_id}");
+            $missing_entries_query = "
+                SELECT contact.id AS contact_id
+                FROM civicrm_contact contact
+                LEFT JOIN {$contact_data_table} data ON data.entity_id = contact.id
+                WHERE contact.id IN (SELECT contact_id_b FROM civicrm_relationship WHERE relationship_type_id = {$relationship_type_id})
+                  AND data.id IS NULL;";
+        }
+        $missing_entries_for_contact_ids = CRM_Core_DAO::executeQuery($missing_entries_query)->fetchAll();
+        if ($missing_entries_for_contact_ids) {
+            $missing_entries_count = count($missing_entries_for_contact_ids);
+            Civi::log()->debug("Creating {$missing_entries_count} missing entries to the '{$contact_data_table}' custom data table.");
+            $init_query = ['contact_results.contact_importance' => CRM_Rating_Base::CONTACT_IMPORTANCE_NORMAL];
+            CRM_Rating_CustomData::resolveCustomFields($init_query);
+            foreach ($missing_entries_for_contact_ids as $contact) {
+//                CRM_Core_DAO::executeQuery("INSERT INTO {$contact_data_table} (entity_id) VALUES ({$contact['contact_id']})");
+                $init_query['id'] = $contact['contact_id'];
+                civicrm_api3('Contact', 'create', $init_query);
+            }
         }
     }
 }

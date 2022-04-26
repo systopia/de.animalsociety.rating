@@ -12,6 +12,7 @@
   "table_name": "civicrm_value_political_activity_additional_fields",
   "collapse_adv_display": "0",
   "is_reserved": "0",
+  "icon": "fa-paw",
   "_fields": [
       {
         "_lookup": ["column_name", "custom_group_id"],

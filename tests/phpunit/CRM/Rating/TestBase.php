@@ -327,7 +327,8 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
         $contact_id = (int) $contact_id;
         $this->assertGreaterThan(0, $contact_id, "Bad activity ID");
         $data = $this->traitCallAPISuccess('Contact', 'getsingle', [
-            'id' => $contact_id
+            'id' => $contact_id,
+            'return' => $this->getRelevantContactFields()
         ]);
         CRM_Rating_CustomData::labelCustomFields($data);
         return $data;
@@ -391,5 +392,30 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
             'source_update_level' => $source_update_level,
             'propagation_level' => $propagation_level,
         ]);
+    }
+
+    /**
+     * Get a list of the relevant contact fields
+     *
+     * @return array list of fields
+     */
+    public function getRelevantContactFields()
+    {
+        static $fields = null;
+        if (!isset($fields)) {
+            // default fields
+            $fields = ['first_name', 'last_name', 'id', 'contact_type', 'display_name'];
+
+            // add custom fields
+            $custom_fields = $this->traitCallAPISuccess('CustomField', 'get', [
+                'custom_group_id' => CRM_Rating_Base::CONTACT_GROUP,
+                'option.limit' => 0,
+            ]);
+            foreach ($custom_fields['values'] as $custom_field) {
+                $fields[] = "custom_{$custom_field['id']}";
+            }
+        }
+
+        return $fields;
     }
 }

@@ -52,7 +52,7 @@ class CRM_Rating_PartyRatingCalculationTest extends CRM_Rating_TestBase
         $this->assertNotEmpty($contact, "Contact not created");
         $this->joinParty($contact['id'], $party['id']);
 
-        // create activity_1
+        // create activity_1 with contact
         $activity_1 = $this->createPoliticalActivity(
             $contact['id'],
             [
@@ -67,7 +67,24 @@ class CRM_Rating_PartyRatingCalculationTest extends CRM_Rating_TestBase
 
         // calculate score and reload
         $this->refreshRating($activity_1['id'], 'Activity', 0, 2);
-        $party = $this->reloadContact($party);
-    }
+        $party2 = $this->reloadContact($party);
 
+
+        // create activity_2 with organisation (political party)
+        $activity_2 = $this->createPoliticalActivity(
+            $party['id'],
+            [
+                'activity_date_time' => date('YmdHis', strtotime("now")), // now
+                CRM_Rating_Base::ACTIVITY_CATEGORY => 1, // livestock
+                CRM_Rating_Base::ACTIVITY_KIND => 2,     // speech
+                CRM_Rating_Base::ACTIVITY_SCORE => 7,    // rather good
+                CRM_Rating_Base::ACTIVITY_WEIGHT => 10,  // 1.0
+            ]
+        );
+        $this->assertNotEmpty($activity_2, "Political Activity not created");
+        $party3 = $this->reloadContact($party);
+
+        $this->refreshRating([$activity_1['id'], $activity_2['id']], 'Activity', 0, 2);
+        $party4 = $this->reloadContact($party);
+    }
 }
