@@ -22,7 +22,7 @@ use CRM_Rating_ExtensionUtil as E;
  *
  * @group headless
  */
-class CRM_Rating_RatingCalculationTest extends CRM_Rating_TestBase
+class CRM_Rating_IndividualRatingCalculationTest extends CRM_Rating_TestBase
 {
     use Api3TestTrait {
         callAPISuccess as protected traitCallAPISuccess;

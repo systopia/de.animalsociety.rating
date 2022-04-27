@@ -23,7 +23,7 @@ use CRM_Rating_ExtensionUtil as E;
 class CRM_Rating_SqlQueries extends CRM_Rating_Base
 {
     /** @var bool can be set to true for sql/data debugging */
-    const DEBUG = true;
+    const DEBUG = false;
 
     /** @var bool can be set to true for tmp table dropping */
     const AUTO_DROP = false; // todo: set to true to save memory? needs testing...
@@ -393,7 +393,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
          ** COMBINE OWN ACTIVITY'S AND MEMBER's RATINGS **
          **************************************************/
 
-//        // debugging:
+//        // debugging help
 //        $debug_contact_tmp_ids = CRM_Core_DAO::executeQuery("SELECT entity_id FROM {$contact_data_table}")->fetchAll();
 //        $debug_activity_tmp_ids = CRM_Core_DAO::executeQuery("SELECT contact_id FROM {$activity_tmp_table_name}")->fetchAll();
 //        $debug_member_tmp_ids = CRM_Core_DAO::executeQuery("SELECT contact_id FROM {$member_scores_tmp_table_name}")->fetchAll();
@@ -405,9 +405,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         }
         $update_query = "
             UPDATE {$contact_data_table} contact_rating
-            INNER JOIN {$activity_tmp_table_name} activity_rating
+            LEFT JOIN {$activity_tmp_table_name} activity_rating
                     ON activity_rating.contact_id = contact_rating.entity_id
-            INNER JOIN {$member_scores_tmp_table_name} member_rating
+            LEFT JOIN {$member_scores_tmp_table_name} member_rating
                     ON member_rating.contact_id = contact_rating.entity_id
             SET contact_rating.overall_rating = (0.1 * IFNULL(activity_rating.overall_rating, 0.0) + 0.9 * IFNULL(member_rating.members_total_rating, 0.0))
                 {$INDIVIDUAL_FIELDS_SQL}
