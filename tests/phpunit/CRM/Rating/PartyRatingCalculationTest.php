@@ -116,7 +116,7 @@ class CRM_Rating_PartyRatingCalculationTest extends CRM_Rating_TestBase
 
         // create a 'high profile' party member
         $important_party_member = $this->createContact(
-            [CRM_Rating_Base::CONTACT_IMPORTANCE => 1]
+            [CRM_Rating_Base::CONTACT_IMPORTANCE => 5]
         );
         $this->assertNotEmpty($important_party_member, "Contact not created");
         $this->joinParty($important_party_member['id'], $party['id']);
@@ -140,5 +140,53 @@ class CRM_Rating_PartyRatingCalculationTest extends CRM_Rating_TestBase
         $this->assertGreaterThanOrEqual(5.0, (float) $normal_party_member[CRM_Rating_Base::LIVESTOCK_RATING], "Rating should be at least average");
         $party = $this->reloadContact($party);
         $this->assertGreaterThan(5.7, (float) $party[CRM_Rating_Base::LIVESTOCK_RATING], "Rating should be above average");
+    }
+
+    /**
+     * Test scenario for the green party
+     *
+     * @see https://projekte.systopia.de/issues/17720#Teilberechnung-f%C3%BCr-Partei-nach-Kategorie
+     */
+    public function testScenarioGreens()
+    {
+        // create a party
+        $green_party = $this->createParty();
+        $this->assertNotEmpty($green_party, "Party not created");
+
+        // create a 'normal' party member
+        $heinz = $this->createContact([
+            CRM_Rating_Base::CONTACT_IMPORTANCE => 1,
+            CRM_Rating_Base::LIVESTOCK_RATING => 4.990,
+            CRM_Rating_Base::OVERALL_RATING => 4.990,
+            CRM_Rating_Base::ACTIVITY_SCORE => 1.0,
+        ]);
+        $this->assertNotEmpty($heinz, "Contact not created");
+        $this->joinParty($heinz['id'], $green_party['id']);
+
+        // create a 'high profile' party member
+        $annalena = $this->createContact([
+               CRM_Rating_Base::CONTACT_IMPORTANCE => 5,
+               CRM_Rating_Base::LIVESTOCK_RATING => 7.893116788,
+               CRM_Rating_Base::OVERALL_RATING => 7.893116788,
+           ]);
+        $this->assertNotEmpty($annalena, "Contact not created");
+        $this->joinParty($annalena['id'], $green_party['id']);
+
+        // add a single 'fake' activity to the party
+        $party_activity = $this->createPoliticalActivity(
+            $green_party['id'],
+            [
+                'activity_date_time' => date('YmdHis', strtotime("now")), // now
+                CRM_Rating_Base::ACTIVITY_CATEGORY => 1, // livestock
+                //CRM_Rating_Base::ACTIVITY_KIND => 2,     // speech
+                 CRM_Rating_Base::ACTIVITY_WEIGHT => 1.0,  // 1.0
+                CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED => 6.655
+            ]
+        );
+
+        // run the calculation
+        $this->refreshRating([$green_party['id']], 'Organization');
+        $green_party = $this->reloadContact($green_party);
+        $this->assertEqualsWithPrecision(7.333837591, $green_party[CRM_Rating_Base::LIVESTOCK_RATING],"Rating should be 7.333837591", self::DOUBLE_PRECISION_LOW);
     }
 }

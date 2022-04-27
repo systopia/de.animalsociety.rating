@@ -353,13 +353,13 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
 
         $CATEGORY_AGGREGATION = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $CATEGORY_AGGREGATION .= "IFNULL(SUM(member_scores.$column_name) / SUM(member_scores.contact_importance), 0) AS {$column_name}, \n";
+            $CATEGORY_AGGREGATION .= "IFNULL(SUM(member_scores.$column_name * member_scores.contact_importance) / SUM(member_scores.contact_importance), 0) AS {$column_name}, \n";
         }
         $members_calculation_query = "
             SELECT
                 contact.id                      AS contact_id,
                 {$CATEGORY_AGGREGATION}
-                IFNULL(SUM(member_scores.overall_rating) / SUM(member_scores.contact_importance), 0)
+                IFNULL(SUM(member_scores.overall_rating * member_scores.contact_importance) / SUM(member_scores.contact_importance), 0)
                                                 AS members_total_rating
             FROM civicrm_contact contact
             INNER JOIN civicrm_relationship membership
@@ -393,7 +393,10 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
          ** COMBINE OWN ACTIVITY'S AND MEMBER's RATINGS **
          **************************************************/
 
-//        // debugging help
+        // debugging help (turn on self::DEBUG)
+//        $debug_sql_activity_scores = "SELECT * FROM {$activity_tmp_table_name};";
+//        $debug_sql_member_scores = "SELECT * FROM {$member_scores_tmp_table_name};";
+//        $debug_sql_activities = "SELECT * FROM {$activity_data_table};";
 //        $debug_contact_tmp_ids = CRM_Core_DAO::executeQuery("SELECT entity_id FROM {$contact_data_table}")->fetchAll();
 //        $debug_activity_tmp_ids = CRM_Core_DAO::executeQuery("SELECT contact_id FROM {$activity_tmp_table_name}")->fetchAll();
 //        $debug_member_tmp_ids = CRM_Core_DAO::executeQuery("SELECT contact_id FROM {$member_scores_tmp_table_name}")->fetchAll();
