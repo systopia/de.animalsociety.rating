@@ -18,628 +18,628 @@ msgstr ""
 
 #: CRM/Rating/Upgrader/Base.php
 msgid "Upgrade %1 to revision %2"
-msgstr ""
+msgstr "Upgrade von %1 zu Revision %2"
 
 #: api/v3/Rating/Calculate.php
 msgid "Entity Type"
-msgstr ""
+msgstr "Entitätstyp"
 
 #: api/v3/Rating/Calculate.php
 msgid ""
 "Type of the entity that the rating should be updated for. Options are "
 "activity, individual, organisation"
-msgstr ""
+msgstr "Entitätstyp, zu dem das Rating upgedated werden soll. Optionen: Aktivität (activity), Individuum (individual), Organisation (organisation)"
 
 #: api/v3/Rating/Calculate.php
 msgid "Entity IDs"
-msgstr ""
+msgstr "Entitäts-IDs"
 
 #: api/v3/Rating/Calculate.php
 msgid ""
 "ID or list of IDs of the entities that the rating should be updated of. "
 "Alternatively, you can set pass 'all' to update *all* those entities."
-msgstr ""
+msgstr "ID oder Liste von IDs von Entitäten, für die das Rating geupdated werden soll. Alternativ kann 'all' übergeben worden, um alle Entitäten zu updaten."
 
 #: api/v3/Rating/Calculate.php
 msgid "Update Sources (level)"
-msgstr ""
+msgstr "Quellen updaten (Wert der Rekursionstiefe)"
 
 #: api/v3/Rating/Calculate.php
 msgid ""
 "First update the data structures needed the given entity, and the recursive "
 "level of that (max 2)"
-msgstr ""
+msgstr "Updaten Sie zuerst die Datenschtrukturen der gegebenen Entität um das rekursive Level von maximal 2."
 
 #: api/v3/Rating/Calculate.php
 msgid "Propagate Updates (level)"
-msgstr ""
+msgstr "Updates nach oben weitergeben (Rekursionstiefe)"
 
 #: api/v3/Rating/Calculate.php
 msgid ""
 "Also update the data structures affected by this change, and the propagation "
 "level (max 2)"
-msgstr ""
+msgstr "Updaten Sie auch die Datenstrukturen, die von dieser Änderung betroffen sind und das Weitergeben an höhere Instanzen um maximal Level 2."
 
 #: l10n.php
 msgid "Overall rating weighted"
-msgstr ""
+msgstr "Gewichtete Gesamtnote"
 
 #: l10n.php
 msgid "Livestock rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Landwirtschaftlich genutzte Tiere"
 
 #: l10n.php
 msgid "Aquaculture rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Tiere in Aquakulturen & Fischerei"
 
 #: l10n.php
 msgid "Animal testing rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Tiere in der Forschung"
 
 #: l10n.php
 msgid "Animal rights rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Tierrecht"
 
 #: l10n.php
 msgid "Hunting & wildlife rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Wildtiere"
 
 #: l10n.php
 msgid "Pets rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Heimtiere"
 
 #: l10n.php
 msgid "Animals in entertainment rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Tiere in der Unterhaltung"
 
 #: l10n.php
 msgid "Food & consumer protection rating weighted"
-msgstr ""
+msgstr "Gewichtete Note für Nahrungsmittel & Verbraucherschutz"
 
 #: l10n.php
 msgid "Sum of coefficients"
-msgstr ""
+msgstr "Summe der Koeffizienten"
 
 #: l10n.php
 msgid "Livestock coefficients"
-msgstr ""
+msgstr "Koeffizient für Landwirtschaftlich genutzte Tiere"
 
 #: l10n.php
 msgid "Aquaculture coefficients"
-msgstr ""
+msgstr "Koeffizient für Tiere in Aquakulturen & Fischerei"
 
 #: l10n.php
 msgid "Animal testing coefficients"
-msgstr ""
+msgstr "Koeffizient für Tiere in der Forschung"
 
 #: l10n.php
 msgid "Animal rights coefficients"
-msgstr ""
+msgstr "Koeffizient für Tierrecht"
 
 #: l10n.php
 msgid "Hunting & wildlife coefficients"
-msgstr ""
+msgstr "Koeffizient für Wildtiere"
 
 #: l10n.php
 msgid "Pets coefficients"
-msgstr ""
+msgstr "Koeffizient für Heimtiere"
 
 #: l10n.php
 msgid "Animals in entertainment coefficients"
-msgstr ""
+msgstr "Koeffizient für Tiere in der Unterhaltung"
 
 #: l10n.php
 msgid "Food & consumer protection coefficients"
-msgstr ""
+msgstr "Koeffizient für Nahrungsmittel & Verbraucherschutz"
 
 #: l10n.php
 msgid "Importance of a politican"
-msgstr ""
+msgstr "Wichtigkeit dieser Person"
 
 #: l10n.php
 msgid "Overall rating"
-msgstr ""
+msgstr "Gesamtnote"
 
 #: l10n.php
 msgid "Livestock rating"
-msgstr ""
+msgstr "Note für Landwirtschaftlich genutzte Tiere"
 
 #: l10n.php
 msgid "Aquaculture rating"
-msgstr ""
+msgstr "Note für Tiere in Aquakulturen & Fischerei"
 
 #: l10n.php
 msgid "Animal testing rating"
-msgstr ""
+msgstr "Note für Tiere in Forschung"
 
 #: l10n.php
 msgid "Animal rights rating"
-msgstr ""
+msgstr "Note für Tierrecht"
 
 #: l10n.php
 msgid "Hunting & wildlife rating"
-msgstr ""
+msgstr "Note für Wildtiere"
 
 #: l10n.php
 msgid "Pets rating"
-msgstr ""
+msgstr "Note für Heimtiere"
 
 #: l10n.php
 msgid "Animals in entertainment rating"
-msgstr ""
+msgstr "Note für Tiere in der Unterhaltung"
 
 #: l10n.php
 msgid "Food & consumer protection rating"
-msgstr ""
+msgstr "Note für Nahrungsmittel & Verbraucherschutz"
 
 #: l10n.php
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: l10n.php
 msgid "Kind"
-msgstr ""
+msgstr "Art"
 
 #: l10n.php
 msgid "Parliament"
-msgstr ""
+msgstr "Parlament"
 
 #: l10n.php
 msgid "Vote"
-msgstr ""
+msgstr "Abstimmung"
 
 #: l10n.php
 msgid "category"
-msgstr ""
+msgstr "Kategorie"
 
 #: l10n.php
 msgid "Subcategory"
-msgstr ""
+msgstr "Unterkategorie"
 
 #: l10n.php
 msgid "Species"
-msgstr ""
+msgstr "Spezies"
 
 #: l10n.php
 msgid "Score"
-msgstr ""
+msgstr "Wert"
 
 #: l10n.php
 msgid "Comment on Rating"
-msgstr ""
+msgstr "Kommentar zur Note"
 
 #: l10n.php
 msgid "Weight"
-msgstr ""
+msgstr "Gewichtung"
 
 #: l10n.php
 msgid "Source - Tierpolitik.org"
-msgstr ""
+msgstr "Quelle - Tierpolitik.org"
 
 #: l10n.php
 msgid "Expectations of citizens"
-msgstr ""
+msgstr "Erwartungen der Bürger"
 
 #: l10n.php
 msgid "CTA - Tweet"
-msgstr ""
+msgstr "CTA - Tweet"
 
 #: l10n.php
 msgid "CTA - Email - Subject"
-msgstr ""
+msgstr "CTA - Email - Betreff"
 
 #: l10n.php
 msgid "CTA - Email - Text"
-msgstr ""
+msgstr "CTA - Email - Text"
 
 #: l10n.php
 msgid "Rating weighted"
-msgstr ""
+msgstr "Gewichtete Note"
 
 #: l10n.php
 msgid "Livestock"
-msgstr ""
+msgstr "Landwirtschaftlich genutzte Tiere"
 
 #: l10n.php
 msgid "Animals in aquaculture & fisheries"
-msgstr ""
+msgstr "Tiere in Aquakulturen & Fischerei"
 
 #: l10n.php
 msgid "Animals in research"
-msgstr ""
+msgstr "Tiere in der Forschung"
 
 #: l10n.php
 msgid "Animal rights"
-msgstr ""
+msgstr "Tierrecht"
 
 #: l10n.php
 msgid "Wildlife"
-msgstr ""
+msgstr "Wildtiere"
 
 #: l10n.php
 msgid "Pets"
-msgstr ""
+msgstr "Heimtiere"
 
 #: l10n.php
 msgid "Animals in entertainment"
-msgstr ""
+msgstr "Tiere in der Unterhaltung"
 
 #: l10n.php
 msgid "Food & consumer protection"
-msgstr ""
+msgstr "Nahrungsmittel & Verbraucherschutz"
 
 #: l10n.php
 msgid "Public communication"
-msgstr ""
+msgstr "Öffentliche Kommunikation"
 
 #: l10n.php
 msgid "Speech"
-msgstr ""
+msgstr "Rede"
 
 #: l10n.php
 msgid "Program item"
-msgstr ""
+msgstr "Programmpunkt"
 
 #: l10n.php
 msgid "Extra-parliamentary work"
-msgstr ""
+msgstr "Außerparlamentarische Arbeit"
 
 #: l10n.php
 msgid "Parliamentary question"
-msgstr ""
+msgstr "Parlamentarische Anfrage"
 
 #: l10n.php
 msgid "Participation draft law"
-msgstr ""
+msgstr "Beteiligung an Gesetzesvorlage"
 
 #: l10n.php
 msgid "Vote on subsidies"
-msgstr ""
+msgstr "Abstimmung über Subvention"
 
 #: l10n.php
 msgid "Vote on public contract"
-msgstr ""
+msgstr "Abstimmung über öffentlichen Auftrag"
 
 #: l10n.php
 msgid "Vote on draft law"
-msgstr ""
+msgstr "Abstimmung über Gesetzentwurf"
 
 #: l10n.php
 msgid "good"
-msgstr ""
+msgstr "Gut"
 
 #: l10n.php
 msgid "rather good"
-msgstr ""
+msgstr "Eher gut"
 
 #: l10n.php
 msgid "rather bad"
-msgstr ""
+msgstr "Eher schlecht"
 
 #: l10n.php
 msgid "bad"
-msgstr ""
+msgstr "Schlecht"
 
 #: l10n.php
 msgid "Badgers"
-msgstr ""
+msgstr "Dachse"
 
 #: l10n.php
 msgid "Cattle"
-msgstr ""
+msgstr "Rinder"
 
 #: l10n.php
 msgid "Ducks"
-msgstr ""
+msgstr "Enten"
 
 #: l10n.php
 msgid "Whales"
-msgstr ""
+msgstr "Wale"
 
 #: l10n.php
 msgid "Cats"
-msgstr ""
+msgstr "Katzen"
 
 #: l10n.php
 msgid "Horses"
-msgstr ""
+msgstr "Pferde"
 
 #: l10n.php
 msgid "Dogs"
-msgstr ""
+msgstr "Hunde"
 
 #: l10n.php
 msgid "Pigs"
-msgstr ""
+msgstr "Schweine"
 
 #: l10n.php
 msgid "Corvidae"
-msgstr ""
+msgstr "Corvidae"
 
 #: l10n.php
 msgid "Crustaceans"
-msgstr ""
+msgstr "Krustentiere"
 
 #: l10n.php
 msgid "Elephants"
-msgstr ""
+msgstr "Elefanten"
 
 #: l10n.php
 msgid "Rabbits"
-msgstr ""
+msgstr "Kaninchen"
 
 #: l10n.php
 msgid "Wolves"
-msgstr ""
+msgstr "Wölfe"
 
 #: l10n.php
 msgid "Sheep"
-msgstr ""
+msgstr "Schaf"
 
 #: l10n.php
 msgid "Geese"
-msgstr ""
+msgstr "Gänse"
 
 #: l10n.php
 msgid "Birds"
-msgstr ""
+msgstr "Vögel"
 
 #: l10n.php
 msgid "Bears"
-msgstr ""
+msgstr "Bären"
 
 #: l10n.php
 msgid "Seals"
-msgstr ""
+msgstr "Robben"
 
 #: l10n.php
 msgid "Pigeons"
-msgstr ""
+msgstr "Tauben"
 
 #: l10n.php
 msgid "Fishes"
-msgstr ""
+msgstr "Fische"
 
 #: l10n.php
 msgid "Chicken"
-msgstr ""
+msgstr "Hühner"
 
 #: l10n.php
 msgid "Squids"
-msgstr ""
+msgstr "Tintenfische"
 
 #: l10n.php
 msgid "Primates"
-msgstr ""
+msgstr "Primaten"
 
 #: l10n.php
 msgid "Rats"
-msgstr ""
+msgstr "Ratten"
 
 #: l10n.php
 msgid "Foxes"
-msgstr ""
+msgstr "Füchse"
 
 #: l10n.php
 msgid "Sharks"
-msgstr ""
+msgstr "Haie"
 
 #: l10n.php
 msgid "Marine mammals"
-msgstr ""
+msgstr "Meeressäuger"
 
 #: l10n.php
 msgid "Published"
-msgstr ""
+msgstr "Veröffentlicht"
 
 #: l10n.php
 msgid "Animal abandonment"
-msgstr ""
+msgstr "Aussetzen von Tieren"
 
 #: l10n.php
 msgid "Slaughter"
-msgstr ""
+msgstr "Schlachtung"
 
 #: l10n.php
 msgid "Slaughter of pregnant animals"
-msgstr ""
+msgstr "Schlachtung schwangerer Tiere"
 
 #: l10n.php
 msgid "War animals"
-msgstr ""
+msgstr "Kriegstiere"
 
 #: l10n.php
 msgid "Chicks killing"
-msgstr ""
+msgstr "Kükentöten"
 
 #: l10n.php
 msgid "Cage keeping"
-msgstr ""
+msgstr "Käfighaltung"
 
 #: l10n.php
 msgid "Cameras in slaughterhouses"
-msgstr ""
+msgstr "Kameras in Schlachthöfen"
 
 #: l10n.php
 msgid "Hunting"
-msgstr ""
+msgstr "Jagd"
 
 #: l10n.php
 msgid "Circus"
-msgstr ""
+msgstr "Zirkus"
 
 #: l10n.php
 msgid "Dolphinarium"
-msgstr ""
+msgstr "Delphinarium"
 
 #: l10n.php
 msgid "Vermins"
-msgstr ""
+msgstr "Sogenannte Schädlinge"
 
 #: l10n.php
 msgid "Electrical Stunning"
-msgstr ""
+msgstr "Elektrobetäubung"
 
 #: l10n.php
 msgid "Factory Farming"
-msgstr ""
+msgstr "Massentierhaltung"
 
 #: l10n.php
 msgid "Labelling"
-msgstr ""
+msgstr "Kennzeichnung"
 
 #: l10n.php
 msgid "CO2 Stunning"
-msgstr ""
+msgstr "CO2-Betäubung"
 
 #: l10n.php
 msgid "Fur"
-msgstr ""
+msgstr "Pelz"
 
 #: l10n.php
 msgid "Force Feeding"
-msgstr ""
+msgstr "Zwangsfütterung / Mästen"
 
 #: l10n.php
 msgid "City Animals"
-msgstr ""
+msgstr "Stadttiere"
 
 #: l10n.php
 msgid "Veggie Menus"
-msgstr ""
+msgstr "Veggie-Menüs"
 
 #: l10n.php
 msgid "Mutilation"
-msgstr ""
+msgstr "Verstümmelung"
 
 #: l10n.php
 msgid "Sport fishing"
-msgstr ""
+msgstr "Sportfischen"
 
 #: l10n.php
 msgid "Live plucking"
-msgstr ""
+msgstr "Lebendrupfen"
 
 #: l10n.php
 msgid "Protection of whistleblowers"
-msgstr ""
+msgstr "Schutz von Whistleblowern"
 
 #: l10n.php
 msgid "Education"
-msgstr ""
+msgstr "Aufklärung"
 
 #: l10n.php
 msgid "Reproduction control"
-msgstr ""
+msgstr "Reproduktionskontrolle"
 
 #: l10n.php
 msgid "Pet trade"
-msgstr ""
+msgstr "Handel mit Haustieren"
 
 #: l10n.php
 msgid "Wildlife trade"
-msgstr ""
+msgstr "Handel mit Wildtieren"
 
 #: l10n.php
 msgid "Transport"
-msgstr ""
+msgstr "Transport"
 
 #: l10n.php
 msgid "Zoo"
-msgstr ""
+msgstr "Zoo"
 
 #: l10n.php
 msgid "Leather"
-msgstr ""
+msgstr "Leder"
 
 #: l10n.php
 msgid "Live animal transport"
-msgstr ""
+msgstr "Lebendtiertransport"
 
 #: l10n.php
 msgid "Reduction of the animal population"
-msgstr ""
+msgstr "Reduzierung der Tierbestände"
 
 #: l10n.php
 msgid "New buildings"
-msgstr ""
+msgstr "Neubauten"
 
 #: l10n.php
 msgid "Emergency killings"
-msgstr ""
+msgstr "Nottötungen"
 
 #: l10n.php
 msgid "Torture breeding"
-msgstr ""
+msgstr "Qualzucht"
 
 #: l10n.php
 msgid "Control and enforcement"
-msgstr ""
+msgstr "Kontrolle und Vollzug"
 
 #: l10n.php
 msgid "Medication use"
-msgstr ""
+msgstr "Medikamenten-Einsatz"
 
 #: l10n.php
 msgid "Right of association"
-msgstr ""
+msgstr "Verbandsklagerecht"
 
 #: l10n.php
 msgid "Animal welfare officer"
-msgstr ""
+msgstr "Tierschutzbeauftragte*r "
 
 #: l10n.php
 msgid "Wildlife and road traffic"
-msgstr ""
+msgstr "Wildtiere & Straßenverkehr"
 
 #: l10n.php
 msgid "Animal shelters"
-msgstr ""
+msgstr "Tierheime"
 
 #: l10n.php
 msgid "Political Activity"
-msgstr ""
+msgstr "Politische Aktivität"
 
 #: l10n.php
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: l10n.php
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: l10n.php
 msgid "Abstention"
-msgstr ""
+msgstr "Enthaltung"
 
 #: l10n.php
 msgid "absent"
-msgstr ""
+msgstr "Abwesend"
 
 #: l10n.php
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: l10n.php
 msgid "1.5"
-msgstr ""
+msgstr "1.5"
 
 #: l10n.php
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: l10n.php
 msgid "2.5"
-msgstr ""
+msgstr "2.5"
 
 #: l10n.php
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: l10n.php
 msgid "normal"
-msgstr ""
+msgstr "Normal"
 
 #: l10n.php
 msgid "well-known"
-msgstr ""
+msgstr "Bekannt"
