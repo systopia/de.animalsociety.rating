@@ -3,6 +3,7 @@
   "name": "activity_type",
   "title": "Activity Type",
   "description": "",
+  "_translate": ["title", "description"],
   "_values": [
     {
       "_lookup": ["name"],

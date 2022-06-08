@@ -3,6 +3,7 @@
   "name": "activity_species",
   "title": "Rating Activity species",
   "description": "",
+  "_translate": ["title", "description"],
   "_values": [
     {
       "_lookup": ["name"],

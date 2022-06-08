@@ -3,6 +3,7 @@
   "name": "activity_subcategory",
   "title": "Rating Activity Subcategory",
   "description": "",
+  "_translate": ["title", "description"],
   "_values": [
     {
       "_lookup": ["name"],

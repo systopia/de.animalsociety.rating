@@ -5,16 +5,28 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de.animalsociety.rating\n"
-"POT-Creation-Date: 2022-04-09 21:16+0200\n"
+"POT-Creation-Date: 2022-06-08 09:57+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: CiviCRM Translators <civicrm-translators@lists.civicrm.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: \n"
 "X-Generator: Poedit 2.0.6\n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de\n"
+
+#: CRM/Rating/Base.php
+msgid "Ist Parteimitglied von"
+msgstr "Ist Parteimitglied von"
+
+#: CRM/Rating/Base.php
+msgid "Hat als Parteimitglied"
+msgstr "Hat als Parteimitglied"
+
+#: CRM/Rating/Base.php
+msgid "Relationship type %1 is not available!"
+msgstr ""
 
 #: CRM/Rating/Upgrader/Base.php
 msgid "Upgrade %1 to revision %2"
@@ -28,7 +40,9 @@ msgstr "Entitätstyp"
 msgid ""
 "Type of the entity that the rating should be updated for. Options are "
 "activity, individual, organisation"
-msgstr "Entitätstyp, zu dem das Rating upgedated werden soll. Optionen: Aktivität (activity), Individuum (individual), Organisation (organisation)"
+msgstr ""
+"Entitätstyp, zu dem das Rating upgedated werden soll. Optionen: Aktivität "
+"(activity), Individuum (individual), Organisation (organisation)"
 
 #: api/v3/Rating/Calculate.php
 msgid "Entity IDs"
@@ -38,7 +52,9 @@ msgstr "Entitäts-IDs"
 msgid ""
 "ID or list of IDs of the entities that the rating should be updated of. "
 "Alternatively, you can set pass 'all' to update *all* those entities."
-msgstr "ID oder Liste von IDs von Entitäten, für die das Rating geupdated werden soll. Alternativ kann 'all' übergeben worden, um alle Entitäten zu updaten."
+msgstr ""
+"ID oder Liste von IDs von Entitäten, für die das Rating geupdated werden "
+"soll. Alternativ kann 'all' übergeben worden, um alle Entitäten zu updaten."
 
 #: api/v3/Rating/Calculate.php
 msgid "Update Sources (level)"
@@ -48,7 +64,9 @@ msgstr "Quellen updaten (Wert der Rekursionstiefe)"
 msgid ""
 "First update the data structures needed the given entity, and the recursive "
 "level of that (max 2)"
-msgstr "Updaten Sie zuerst die Datenschtrukturen der gegebenen Entität um das rekursive Level von maximal 2."
+msgstr ""
+"Updaten Sie zuerst die Datenschtrukturen der gegebenen Entität um das "
+"rekursive Level von maximal 2."
 
 #: api/v3/Rating/Calculate.php
 msgid "Propagate Updates (level)"
@@ -58,7 +76,61 @@ msgstr "Updates nach oben weitergeben (Rekursionstiefe)"
 msgid ""
 "Also update the data structures affected by this change, and the propagation "
 "level (max 2)"
-msgstr "Updaten Sie auch die Datenstrukturen, die von dieser Änderung betroffen sind und das Weitergeben an höhere Instanzen um maximal Level 2."
+msgstr ""
+"Updaten Sie auch die Datenstrukturen, die von dieser Änderung betroffen sind "
+"und das Weitergeben an höhere Instanzen um maximal Level 2."
+
+#: l10n.php
+msgid "Rating Helper"
+msgstr "Hilfsfelder"
+
+#: l10n.php
+msgid "Rating"
+msgstr "Bewertung"
+
+#: l10n.php
+msgid "Political Activity - Additional Fields"
+msgstr "Zusatzfelder"
+
+#: l10n.php
+msgid "Rating Activity category"
+msgstr "Kategorie"
+
+#: l10n.php
+msgid "Rating Activity Kind"
+msgstr "Art"
+
+#: l10n.php
+msgid "Rating Activity Score"
+msgstr "Note"
+
+#: l10n.php
+msgid "Rating Activity species"
+msgstr "Spezie"
+
+#: l10n.php
+msgid "Activity Status"
+msgstr "Aktivitätsstatus"
+
+#: l10n.php
+msgid "Rating Activity Subcategory"
+msgstr "Unterkategorie"
+
+#: l10n.php
+msgid "Activity Type"
+msgstr "Aktivitätstyp"
+
+#: l10n.php
+msgid "Rating Activity Vote"
+msgstr "Votum"
+
+#: l10n.php
+msgid "Rating Activity Weight"
+msgstr "Gewicht der Aktivität"
+
+#: l10n.php
+msgid "Contact importance"
+msgstr "Wichtigkeit des Kontakts"
 
 #: l10n.php
 msgid "Overall rating weighted"
@@ -133,8 +205,8 @@ msgid "Food & consumer protection coefficients"
 msgstr "Koeffizient für Nahrungsmittel & Verbraucherschutz"
 
 #: l10n.php
-msgid "Importance of a politican"
-msgstr "Wichtigkeit dieser Person"
+msgid "Importance of a politician"
+msgstr "Wichtigkeit des Politikers"
 
 #: l10n.php
 msgid "Overall rating"
@@ -225,6 +297,10 @@ msgid "CTA - Tweet"
 msgstr "CTA - Tweet"
 
 #: l10n.php
+msgid "CTA - Facebook"
+msgstr "CTA - Facebook"
+
+#: l10n.php
 msgid "CTA - Email - Subject"
 msgstr "CTA - Email - Betreff"
 
@@ -311,6 +387,10 @@ msgstr "Gut"
 #: l10n.php
 msgid "rather good"
 msgstr "Eher gut"
+
+#: l10n.php
+msgid "average"
+msgstr "Durschnittlich\t"
 
 #: l10n.php
 msgid "rather bad"
@@ -586,7 +666,7 @@ msgstr "Verbandsklagerecht"
 
 #: l10n.php
 msgid "Animal welfare officer"
-msgstr "Tierschutzbeauftragte*r "
+msgstr "Tierschutzbeauftragte*r"
 
 #: l10n.php
 msgid "Wildlife and road traffic"

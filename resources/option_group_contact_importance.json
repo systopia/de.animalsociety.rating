@@ -3,6 +3,7 @@
   "name": "contact_importance",
   "title": "Contact importance",
   "description": "",
+  "_translate": ["title", "description"],
   "_values": [
     {
       "_lookup": ["name"],

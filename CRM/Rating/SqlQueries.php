@@ -117,7 +117,8 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
     protected static function getActivityScoreExpression($activity_rating_table, $activity_table)
     {
         // type coefficient "Aktivitätsart-Koeffizient"
-        [$field_group, $field_name] = explode('.', self::ACTIVITY_KIND);
+        // disabled for compatibility: [$field_group, $field_name] = explode('.', self::ACTIVITY_KIND);
+        list($field_group, $field_name) = explode('.', self::ACTIVITY_KIND);
         $kind_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $kind_coefficient = self::createSqlMappingExpression(
             "{$activity_rating_table}.{$kind_coefficient_field['column_name']}",
@@ -125,7 +126,8 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         );
 
         // weight coefficient "Gewichtungskoeffizient"
-        [$field_group, $field_name] = explode('.', self::ACTIVITY_WEIGHT);
+        // disabled for compatibility: [$field_group, $field_name] = explode('.', self::ACTIVITY_WEIGHT);
+        list($field_group, $field_name) = explode('.', self::ACTIVITY_WEIGHT);
         $weight_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $weight_coefficient = self::createSqlMappingExpression(
             "{$activity_rating_table}.{$weight_coefficient_field['column_name']}",
@@ -136,7 +138,8 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $age_coefficient = "0.75 / (POWER(((DATEDIFF(NOW(), {$activity_table}.activity_date_time)/365.0)/2.9), 4) + 1.0) + 0.25";
 
         // score coefficient "Gewichtete Note"
-        [$field_group, $field_name] = explode('.', self::ACTIVITY_SCORE);
+        // disabled for compatibility: [$field_group, $field_name] = explode('.', self::ACTIVITY_SCORE);
+        list($field_group, $field_name) = explode('.', self::ACTIVITY_SCORE);
         $score_coefficient_field = CRM_Rating_CustomData::getCustomField($field_group, $field_name);
         $score_coefficient = self::createSqlMappingExpression(
             "{$activity_rating_table}.{$score_coefficient_field['column_name']}",

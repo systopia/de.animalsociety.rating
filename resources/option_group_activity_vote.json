@@ -3,6 +3,7 @@
   "name": "activity_vote",
   "title": "Rating Activity Vote",
   "description": "",
+  "_translate": ["title", "description"],
   "_values": [
     {
       "_lookup": ["name"],

@@ -324,6 +324,9 @@ class CRM_Rating_CustomData {
       $value = $data[$translate_key];
       if (is_string($value)) {
         $data[$translate_key] = ts($value, array('domain' => $this->ts_domain));
+        if ($data[$translate_key] == $value) {
+            Civi::log()->debug("not translated: " . $value);
+        }
       }
     }
   }
