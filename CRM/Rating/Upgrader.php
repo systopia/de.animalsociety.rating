@@ -50,7 +50,7 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base
      * @return TRUE on success
      * @throws Exception
      */
-    public function upgrade_0001()
+    public function upgrade_0002()
     {
         $this->ctx->log->info('Translating data structures');
         $customData = new CRM_Rating_CustomData(E::LONG_NAME);
