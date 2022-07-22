@@ -347,12 +347,14 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
 
         /************************************************
          **    9/10: ORGANISATION MEMBERS' RATINGS     **
-         **          aggregate members' ratings        **
+         **    aggregate (visible) members' ratings    **
          **       results in {$activity_tmp_table}     **
          ************************************************/
 
         $membership_relationship_type_id = self::getPartyMemberRelationshipTypeId();
         $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);
+        $contact_visibility_data_table = CRM_Rating_CustomData::getGroupTable(self::OBSERVATORIUM_CONTACT_GROUP);
+        $contact_visibility_field = CRM_Rating_CustomData::getCustomField(self::OBSERVATORIUM_CONTACT_GROUP, self::OBSERVATORIUM_VISIBILITY_FIELD_NAME);
 
         $CATEGORY_AGGREGATION = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
@@ -374,8 +376,11 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
                    AND member.is_deleted = 0
             LEFT JOIN {$contact_data_table} member_scores
                    ON member_scores.entity_id = member.id
+            LEFT JOIN {$contact_visibility_data_table} observatorium_data
+                   ON observatorium_data.entity_id = member.id
             WHERE {$contact_id_selector}
               AND contact.contact_type = 'Organization'
+              AND observatorium_data.{$contact_visibility_field['column_name']} = 1
             GROUP BY contact.id
             ;";
 
