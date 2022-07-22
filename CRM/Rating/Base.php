@@ -138,10 +138,10 @@ abstract class CRM_Rating_Base
     const ACTIVITY_KIND_MAPPING = [
         1 => 1.0, // public communication
         2 => 2.0, // speech
-        3 => 3.0, // program item
+        3 => 2.0, // program item
         4 => 4.0, // Extra-parliamentary work
         5 => 5.0, // Parliamentary question
-        6 => 6.0, // participation draft law
+        6 => 7.0, // participation draft law
         7 => 7.0, // Vote on subsidies
         8 => 7.0, // Vote on public contract
         10 => 10.0, // Vote on draft law
