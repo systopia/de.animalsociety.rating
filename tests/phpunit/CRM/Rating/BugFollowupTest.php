@@ -94,7 +94,7 @@ class CRM_Rating_BugFollowupTest extends CRM_Rating_TestBase
         $this->refreshRating($activity_3['id'], 'Activity');
         $activity_3 = $this->reloadActivity($activity_3);
         $this->assertArrayHasKey(CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED, $activity_3, "The weighted score was not calculated.");
-        $this->assertEquals(15.0, $activity_3[CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED], "The weight calculation seems wrong.", self::DOUBLE_PRECISION_HIGH);
+        $this->assertEquals(10.0, $activity_3[CRM_Rating_Base::ACTIVITY_RATING_WEIGHTED], "The weight calculation seems wrong.", self::DOUBLE_PRECISION_HIGH);
     }
 
 }
