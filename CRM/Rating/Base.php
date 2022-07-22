@@ -43,6 +43,9 @@ abstract class CRM_Rating_Base
     /** @var string custom field key for the importance of a contact */
     const CONTACT_IMPORTANCE = 'contact_results.contact_importance';
 
+    /** @var string custom field key for the importance of a contact */
+    const CONTACT_VISIBLE = 'Observatorium.Anzeigen';
+
     /** @var string custom field key for the livestock rating weighted */
     const LIVESTOCK_RATING = 'contact_results.livestock_rating';
 
@@ -218,7 +221,11 @@ abstract class CRM_Rating_Base
     /** @var string custom group key for the contact fields */
     const CONTACT_GROUP = 'contact_results';
 
+    /** @var string custom group key for the contact fields */
+    const OBSERVATORIUM_CONTACT_GROUP = 'Observatorium'; // remark: name dictated by client
 
+    /** @var string custom field for visibility to web frontend (observatorium) */
+    const OBSERVATORIUM_VISIBILITY_FIELD_NAME = 'Anzeigen'; // remark: name dictated by client
 
     /** @var string custom field key for the activity kind */
     const ACTIVITY_KIND = 'political_activity_additional_fields.rating_kind';

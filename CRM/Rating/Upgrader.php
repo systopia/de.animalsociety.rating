@@ -41,6 +41,7 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base
         $customData->syncOptionGroup(E::path('resources/option_group_contact_importance.json'));
         $customData->syncCustomGroup(E::path('resources/custom_group_political_activity_additional_fields.json'));
         $customData->syncCustomGroup(E::path('resources/custom_group_contact_results.json'));
+        $customData->syncCustomGroup(E::path('resources/custom_group_contact_observatorium.json'));
 //        $customData->syncCustomGroup(E::path('resources/custom_group_contact_help_fields.json'));
     }
 
@@ -66,6 +67,20 @@ class CRM_Rating_Upgrader extends CRM_Rating_Upgrader_Base
         $customData->syncOptionGroup(E::path('resources/option_group_contact_importance.json'));
         $customData->syncCustomGroup(E::path('resources/custom_group_political_activity_additional_fields.json'));
         $customData->syncCustomGroup(E::path('resources/custom_group_contact_results.json'));
+        return true;
+    }
+
+    /**
+     * Add observatorium - visibility field
+     *
+     * @return TRUE on success
+     * @throws Exception
+     */
+    public function upgrade_0003()
+    {
+        $this->ctx->log->info('Translating data structures');
+        $customData = new CRM_Rating_CustomData(E::LONG_NAME);
+        $customData->syncCustomGroup(E::path('resources/custom_group_contact_observatorium.json'));
         return true;
     }
 }

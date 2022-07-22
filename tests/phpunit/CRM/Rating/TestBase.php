@@ -142,7 +142,8 @@ class CRM_Rating_TestBase extends \PHPUnit\Framework\TestCase implements Headles
             'last_name'    => $this->randomString(10),
             'email'        => $this->randomString(10) . '@' . $this->randomString(10) . '.org',
             'prefix_id'    => 1,
-            CRM_Rating_Base::CONTACT_IMPORTANCE => 1
+            CRM_Rating_Base::CONTACT_IMPORTANCE => 1,
+            CRM_Rating_Base::CONTACT_VISIBLE => 1,
         ];
         foreach ($contact_details as $key => $value) {
             $contact_data[$key] = $value;
