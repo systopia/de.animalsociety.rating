@@ -2,7 +2,7 @@
 <extension key="de.animalsociety.rating" type="module">
   <file>rating</file>
   <name>Rating system for politicians and parties</name>
-  <description>FIXME</description>
+  <description>Inspired by www.politique-animaux.fr</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>SYSTOPIA</author>
