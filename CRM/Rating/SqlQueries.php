@@ -243,7 +243,7 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         $contact_data_table = CRM_Rating_CustomData::getGroupTable(self::CONTACT_GROUP);
         $INDIVIDUAL_FIELDS_SQL = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = new_values.{$column_name}";
+            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = " . CRM_Rating_Algorithm::ratingValueFilter("new_values.{$column_name}");
         }
         $update_query = "
             UPDATE {$contact_data_table} contact_rating
@@ -412,7 +412,9 @@ class CRM_Rating_SqlQueries extends CRM_Rating_Base
         // then run the value update query
         $INDIVIDUAL_FIELDS_SQL = '';
         foreach (self::CONTACT_FIELD_TO_ACTIVITY_CATEGORIES_MAPPING as $column_name => $categories) {
-            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = (0.1 * IFNULL(activity_rating.{$column_name}, 0.0) + 0.9 * IFNULL(member_rating.{$column_name}, 0.0))";
+            //$INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = (0.1 * IFNULL(activity_rating.{$column_name}, 0.0) + 0.9 * IFNULL(member_rating.{$column_name}, 0.0))";
+            $individual_field_formula = "(0.1 * IFNULL(activity_rating.{$column_name}, 0.0) + 0.9 * IFNULL(member_rating.{$column_name}, 0.0))";
+            $INDIVIDUAL_FIELDS_SQL .= ", contact_rating.{$column_name} = " . CRM_Rating_Algorithm::ratingValueFilter($individual_field_formula);
         }
         $update_query = "
             UPDATE {$contact_data_table} contact_rating

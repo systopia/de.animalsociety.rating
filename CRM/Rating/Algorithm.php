@@ -96,4 +96,20 @@ class CRM_Rating_Algorithm extends CRM_Rating_Base
         $count = $contact_ids == 'all' ? 'all' : count($contact_ids);
         self::log("Updating {$count} organisations took {$runtime} seconds.");
     }
+
+    /**
+     * Add a filter/mapping to the calculated rating value
+     *
+     * @param string $sql_expression
+     *   the sql expression containing the current value
+     *
+     * @return string
+     *    a mapped or filtered expression
+     *
+     * @see https://projekte.systopia.de/issues/18824
+     */
+    public static function ratingValueFilter($sql_expression)
+    {
+        return "IF({$sql_expression} = 5.0, NULL, {$sql_expression})";
+    }
 }
