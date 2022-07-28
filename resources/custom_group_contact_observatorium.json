@@ -18,7 +18,6 @@
       "_translate": ["label"],
       "weight": "1",
       "name": "Anzeigen",
-      "column_name": "anzeigen_194",
       "label": "Anzeigen",
       "data_type": "Boolean",
       "html_type": "Radio",
